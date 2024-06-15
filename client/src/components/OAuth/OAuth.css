@@ -1,0 +1,42 @@
+.oauth-social {
+  margin: 0 10px 0 10px;
+}
+
+.text-wrap-oauth {
+  display: flex;
+  align-items: center;
+  margin-block: 10px;
+}
+.text-oauth {
+  text-align: center;
+  padding-inline: 5px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #808191;
+  margin-bottom: 0;
+}
+.text-line-oauth {
+  height: 1px;
+  width: 100%;
+  background-color: #f1f1f3;
+}
+
+.btn-login-google {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px;
+  border: 1px solid #cbd5e1;
+  margin-top: 5px;
+  border-radius: 5px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #4b5264;
+  transition: all 0.25s;
+}
+
+.btn-login-google:hover {
+  background-color: rgba(196, 197, 200, 0.48);
+}

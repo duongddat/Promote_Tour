@@ -1,0 +1,22 @@
+extend baseEmail
+block content
+    p
+        a(href="http://localhost:5173/", target='_blank').text-title HoYoViVu
+    strong Xin chào, #{name}
+    p Chúng tôi xin gửi lời chào nồng nhiệt nhất đến bạn từ đội ngũ 
+        strong HoYoViVu
+        | - trang web du lịch hàng đầu tại Việt Nam! 🎉 🎉 🎉 🎉 🎉 🎉
+    p Hãy cùng chúng tôi khám phá và chia sẻ những khoảnh khắc đẹp nhất của cuộc đời thông qua những chuyến phiêu lưu đầy màu sắc! 🙏
+    p Hãy bắt đầu cập nhật thông tin của bạn, để có trải nghiệm tại website của chúng tôi
+    table.btn.btn-primary(role='presentation', border='0', cellpadding='0', cellspacing='0')
+        tbody
+            tr
+                td(align='left')
+                    table(role='presentation', border='0', cellpadding='0', cellspacing='0')
+                        tbody
+                            tr
+                                td
+                                    a(href=`${url}`, target='_blank') Cập nhật thông tin
+    p Nếu bạn có bất kỳ câu hỏi hoặc yêu cầu nào, đừng ngần ngại liên hệ với chúng tôi. Đội ngũ HoyoVivu luôn sẵn lòng hỗ trợ bạn một cách nhiệt tình và chuyên nghiệp.
+    p Chúng tôi rất mong muốn được đồng hành cùng bạn trên những hành trình tuyệt vời sắp tới! 💖💖💖
+    p - Copyright © XADD. All Rights Reserved

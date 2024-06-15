@@ -1,0 +1,85 @@
+.button {
+  background-color: var(--primary-color);
+  color: #fff;
+  font-size: 14px;
+  padding: 8px 20px;
+  border-radius: 50px;
+  transition: 0.3s background-color;
+  border: 1px solid #00000000;
+}
+
+.button:hover {
+  background-color: var(--secondary-color);
+}
+
+/*Custom Boostrap*/
+.navbar {
+  background-color: #fff;
+  height: 60px;
+  border-bottom: 1px solid #f1f4f9;
+}
+.navbar-brand,
+.offcanvas-title {
+  font-weight: 800;
+  color: var(--primary-color);
+  font-size: 26px;
+  transition: 0.3s color;
+}
+.navbar-brand:hover {
+  color: var(--primary-color);
+}
+
+.navbar-toggler {
+  border: none;
+  font-size: 1.25rem;
+}
+
+.navbar-toggler:focus,
+.btn-close:focus {
+  box-shadow: none;
+  outline: none;
+}
+
+.nav-link {
+  text-align: center;
+  color: #666777;
+  font-weight: 500;
+  position: relative;
+}
+
+.nav-link__item:hover,
+.nav-link__item:active {
+  color: #000;
+}
+
+.nav-link__item::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: 0.3s ease-in-out;
+  width: 0;
+  height: 5px;
+  border-radius: 50px;
+  background-color: var(--primary-color);
+  visibility: hidden;
+}
+
+.nav-link__item:hover::before,
+.nav-link__item.active::before {
+  width: 60%;
+  visibility: visible;
+}
+
+.navbar-user {
+  display: flex;
+}
+
+.nav-user-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  margin-right: 10px;
+  border: 3px solid var(--primary-color);
+}

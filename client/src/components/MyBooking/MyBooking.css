@@ -1,0 +1,22 @@
+.text-booking {
+  padding: 2px 5px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.booking-remaining {
+  background-color: yellow;
+}
+.booking-success {
+  background-color: greenyellow;
+}
+.table-text__red {
+  color: red;
+}
+
+.table-note {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-color);
+}

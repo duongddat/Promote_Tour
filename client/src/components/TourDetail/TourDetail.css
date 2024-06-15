@@ -1,0 +1,142 @@
+.tour-content {
+  border-radius: 12px;
+  border: 1px solid #eaecf0;
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+  padding: 15px 35px;
+  min-height: 100px;
+  transition: all 0.25s ease-in-out;
+}
+
+.tour__header {
+  padding: 10px 10px 30px;
+}
+
+.tour-title {
+  font-size: 24px;
+  line-height: 44px;
+  margin-bottom: 0px;
+}
+
+.tour-wrapper__price {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: 15px;
+  column-gap: 10px;
+}
+
+.tour-price {
+  font-weight: 700;
+  color: red;
+}
+.tour-price__old {
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: line-through;
+  color: var(--text-color);
+}
+
+.img-tour__cover {
+  border-radius: 10px;
+  object-fit: cover;
+  width: 100%;
+  height: auto;
+  max-height: 450px;
+}
+.heading-secondary {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 26px;
+}
+
+.description-box .description__text {
+  font-size: 16px;
+  text-align: justify;
+  color: var(--text-color);
+}
+.description__text::before {
+  content: "";
+  margin: 0 20px;
+}
+
+.description-box .description__text:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+.overview-box__detail {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+.overview-box__detail:not(:last-child) {
+  margin-bottom: 20px;
+}
+.overview-box__icon {
+  height: 1.2rem;
+  width: 1.2rem;
+  font-size: 1.2rem;
+  fill: var(--primary-color);
+}
+.overview-box__label {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 16px;
+}
+.overview-box__text {
+  color: var(--text-color);
+}
+.overview-box__img {
+  border-radius: 50%;
+  height: 3rem;
+  border: 3px solid var(--secondary-color);
+}
+
+.img-gallery {
+  border-radius: 10px;
+  width: 100%;
+  height: auto;
+  max-height: 450px;
+  object-fit: cover;
+}
+
+.review-box {
+  padding: 1.5rem 1.25rem;
+  border: 1px solid #e9e9e9;
+  border-radius: 15px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
+
+.review-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.text-label {
+  margin-left: 5px;
+  margin-right: 15px;
+}
+.input-review {
+  flex: 1;
+  padding: 8px 16px;
+  border-radius: 28px;
+  border: 1px solid #eaecf0;
+  box-shadow: var(--shadow-xs);
+}
+
+.input-review:focus {
+  outline: 1px solid var(--primary-color);
+}
+
+.user-review_tool {
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.user-review_tool i:hover {
+  color: var(--primary-color);
+}

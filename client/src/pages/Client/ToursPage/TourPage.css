@@ -1,0 +1,25 @@
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+.btn-filter {
+  cursor: pointer;
+  background: linear-gradient(0deg, #fff, #fff),
+    linear-gradient(0deg, #eaecf0, #eaecf0);
+  border: 1px solid #eaecf0 !important;
+  color: #1d2939;
+  fill: #1d2939;
+  padding: 16px 20px;
+  border-radius: 100px;
+}
+.btn-filter:hover {
+  background: #f9fafb;
+  color: #344054;
+  fill: #344054;
+}
+.btn-icon svg {
+  height: 20px;
+  width: 20px;
+}

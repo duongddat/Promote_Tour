@@ -1,0 +1,20 @@
+.thank__you span i {
+  font-size: 4rem;
+  color: var(--primary-color);
+}
+
+.thank__you h1 {
+  font-size: 3.6rem;
+  font-family: var(--subtitle-font-name);
+}
+
+.thank__you h3 {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.footer-thank__you {
+  margin: auto;
+  width: 200px;
+}

@@ -1,0 +1,55 @@
+.section-mediumn {
+  padding: 20px 0 30px 0;
+}
+
+.static-title {
+  padding: 5px 0 10px 0;
+}
+.static-title h6 {
+  font-size: 21px;
+  font-weight: 700;
+  color: #012970;
+  font-family: "Poppins", sans-serif;
+}
+.static-title span {
+  color: #899bbd;
+  font-size: 14px;
+  font-weight: 400;
+  margin-left: 5px;
+}
+.filter-icon {
+  color: #aab7cf;
+  transition: 0.3s;
+  font-size: 14px;
+}
+.card-icon {
+  color: #4154f1;
+  background: #f6f6fe;
+  font-size: 32px;
+  line-height: 0;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+.info-card {
+  font-size: 28px;
+  color: #012970;
+  font-weight: 700;
+  margin: 0;
+  padding: 0;
+}
+
+.revenueCard {
+  position: relative;
+  height: 76vh;
+}
+
+.btn-revenue {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  top: 25px;
+  right: 35px;
+}

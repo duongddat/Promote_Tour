@@ -1,0 +1,31 @@
+.btn-pagination {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--secondary-color);
+  border-radius: 50%;
+  margin: 10px 5px 0;
+}
+
+.btn-pagination:hover,
+.btn-active {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.btn-pagination-icon {
+  width: 3rem;
+  border-radius: 20px;
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.btn-disable {
+  background-color: #cfd6fb;
+  border-color: #fff;
+  cursor: not-allowed;
+}
+
+.btn-disable:hover {
+  background-color: #cfd6fb;
+  border-color: #fff;
+}
