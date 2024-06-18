@@ -46,7 +46,7 @@ function Testimonial({ reviews }) {
             </div>
             <div className="swiper-client-data d-flex justify-content-center align-items-center gap-4 mt-3">
               <LazyLoadImage
-                src={`http://localhost:8080/img/user/${review.user.photo}`}
+                src={`${review.user.photo}`}
                 alt={review.user._id}
               />
               <div className="client-data-details">

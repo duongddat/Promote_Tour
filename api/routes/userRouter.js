@@ -12,6 +12,7 @@ router.patch(
   "/updateMe",
   userController.uploadUserPhoto,
   userController.resizeUserPhoto,
+  userController.uploadFireBase,
   userController.updateMe
 );
 
@@ -26,6 +27,7 @@ router
   .post(
     userController.uploadUserPhoto,
     userController.resizeUserPhoto,
+    userController.uploadFireBase,
     userController.createUser
   );
 
@@ -35,6 +37,7 @@ router
   .patch(
     userController.uploadUserPhoto,
     userController.resizeUserPhoto,
+    userController.uploadFireBase,
     userController.updateUser
   )
   .delete(userController.deleteUser);

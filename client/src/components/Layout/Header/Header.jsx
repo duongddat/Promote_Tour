@@ -88,7 +88,7 @@ function Header() {
                     aria-expanded="false"
                   >
                     <img
-                      src={`http://localhost:8080/img/user/${userInfo.photo}`}
+                      src={`${userInfo.photo}`}
                       alt="user avatar"
                       className="nav-user-avatar"
                     />

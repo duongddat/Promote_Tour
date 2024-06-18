@@ -7,9 +7,41 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const AIPFeatures = require("../utils/apiFeatures");
 const { default: mongoose } = require("mongoose");
-const { query } = require("express");
+const { bucket } = require("../config/firebase.js");
 
 //=====================CONFIGURE IMG FILE=============================
+const uploadImage = async (file, filename) => {
+  const folderName = "post";
+  const filePath = `${folderName}/${filename}`;
+
+  const fileRef = bucket.file(filePath);
+  const stream = fileRef.createWriteStream({
+    metadata: {
+      contentType: file.mimetype,
+    },
+  });
+
+  return new Promise((resolve, reject) => {
+    stream.on("error", (err) => {
+      console.error(`Error uploading ${filePath} to Firebase:`, err);
+      reject(new AppError(`Unable to upload ${filePath}`, 500));
+    });
+
+    stream.on("finish", async () => {
+      try {
+        await fileRef.makePublic();
+        const publicUrl = `https://storage.googleapis.com/${bucket.name}/${filePath}`;
+        resolve(publicUrl);
+      } catch (error) {
+        console.error(`Error making ${filePath} public:`, error);
+        reject(new AppError(`Error making ${filePath} public`, 500));
+      }
+    });
+
+    stream.end(file.buffer);
+  });
+};
+
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) => {
@@ -45,9 +77,9 @@ exports.resizeImages = catchAsync(async (req, res, next) => {
       const ext = file.mimetype.split("/")[1];
       const filename = `post-images-${Date.now()}-${i + 1}.${ext}`;
 
-      await sharp(file.buffer).toFile(`public/img/post/${filename}`);
+      const publicUrl = await uploadImage(file, filename);
 
-      req.body.photo.push(filename);
+      req.body.photo.push(publicUrl);
     })
   );
 

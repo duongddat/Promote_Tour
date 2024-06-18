@@ -195,7 +195,7 @@ function BlogForm({ countries, isLoading, action, blog = null }) {
               {blog.photo.map((image, index) => (
                 <div key={index} className="form-img-upload__img">
                   <img
-                    src={`http://localhost:8080/img/post/${image}`}
+                    src={`${image}`}
                     alt="image upload"
                     className="upload-img"
                   />

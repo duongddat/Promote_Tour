@@ -135,7 +135,7 @@ function DetailTourPage() {
                     <div className="form-img-upload__imgs">
                       <div className="form-img-upload__img">
                         <img
-                          src={`http://localhost:8080/img/tour/${tour.imageCover}`}
+                          src={`${tour.imageCover}`}
                           alt="image upload"
                           className="upload-img"
                         />
@@ -154,7 +154,7 @@ function DetailTourPage() {
                         {tour.images.map((image, index) => (
                           <div key={index} className="form-img-upload__img">
                             <img
-                              src={`http://localhost:8080/img/tour/${image}`}
+                              src={`${image}`}
                               alt="image upload"
                               className="upload-img"
                             />

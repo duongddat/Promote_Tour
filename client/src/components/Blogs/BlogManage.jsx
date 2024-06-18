@@ -56,7 +56,7 @@ function BlogManage({ blogs, pageNumber, setPage, onPaginate }) {
                     <div className="mhy-avatar">
                       <img
                         className="mhy-avatar_img"
-                        src={`http://localhost:8080/img/user/${userInfo.photo}`}
+                        src={`${userInfo.photo}`}
                         alt="user avatar"
                       />
                       <img

@@ -2,7 +2,9 @@
 import { defer, json } from "react-router-dom";
 
 async function loaderBlog(requestUrl) {
-  const response = await fetch(`http://localhost:8080/posts${requestUrl}`);
+  const response = await fetch(
+    `http://localhost:8080/posts${requestUrl}?limit=6&page=1`
+  );
 
   if (!response.ok) {
     throw json(

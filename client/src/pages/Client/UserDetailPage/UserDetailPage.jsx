@@ -27,7 +27,7 @@ function UserDetailPage() {
               <div className="user-detail__info">
                 <div className="user-detail__header">
                   <img
-                    src={`http://localhost:8080/img/user/${loadedUser.photo}`}
+                    src={`${loadedUser.photo}`}
                     alt={loadedUser.name}
                     className="user-detail__img"
                   />

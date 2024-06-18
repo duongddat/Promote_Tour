@@ -11,7 +11,7 @@ async function loaderUsers() {
     );
   }
 
-  const response = await fetch("http://localhost:8080/users", {
+  const response = await fetch("http://localhost:8080/users?limit=10&page=1", {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,

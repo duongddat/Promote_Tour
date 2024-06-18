@@ -9,8 +9,47 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const AIPFeatures = require("../utils/apiFeatures");
 const covertSearchKey = require("../utils/covertSearchUnikey");
+const { bucket } = require("../config/firebase.js");
 
 //=====================CONFIGURE IMG FILE=============================
+const uploadImage = async (file, filename) => {
+  const folderName = "tour";
+  const filePath = `${folderName}/${filename}`;
+
+  const resizedImageBuffer = await sharp(file.buffer)
+    .resize(2000, 1333)
+    .toFormat("jpeg")
+    .jpeg({ quality: 95 })
+    .toBuffer();
+
+  const fileRef = bucket.file(filePath);
+  const stream = fileRef.createWriteStream({
+    metadata: {
+      contentType: file.mimetype,
+    },
+  });
+
+  return new Promise((resolve, reject) => {
+    stream.on("error", (err) => {
+      console.error(`Error uploading ${filePath} to Firebase:`, err);
+      reject(new AppError(`Unable to upload ${filePath}`, 500));
+    });
+
+    stream.on("finish", async () => {
+      try {
+        await fileRef.makePublic();
+        const publicUrl = `https://storage.googleapis.com/${bucket.name}/${filePath}`;
+        resolve(publicUrl);
+      } catch (error) {
+        console.error(`Error making ${filePath} public:`, error);
+        reject(new AppError(`Error making ${filePath} public`, 500));
+      }
+    });
+
+    stream.end(resizedImageBuffer);
+  });
+};
+
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) => {
@@ -43,31 +82,18 @@ exports.resizeImages = catchAsync(async (req, res, next) => {
   }
 
   if (req.files.imageCover) {
-    const imageCover = `tour-cover-${Date.now()}-cover.jpeg`;
-    await sharp(req.files.imageCover[0].buffer)
-      .resize(2000, 1333)
-      .toFormat("jpeg")
-      .jpeg({ quality: 95 })
-      .toFile(`public/img/tour/${imageCover}`);
-
-    //Convert to factory function req.body
-    req.body.imageCover = imageCover;
+    const imageCoverFilename = `tour-cover-${Date.now()}-cover.jpeg`;
+    req.body.imageCover = await uploadImage(
+      req.files.imageCover[0],
+      imageCoverFilename
+    );
   }
 
   if (req.files.images) {
-    req.body.images = [];
-
-    await Promise.all(
+    req.body.images = await Promise.all(
       req.files.images.map(async (file, i) => {
-        const filename = `tour-images-${Date.now()}-${i + 1}.jpeg`;
-
-        await sharp(file.buffer)
-          .resize(2000, 1333)
-          .toFormat("jpeg")
-          .jpeg({ quality: 95 })
-          .toFile(`public/img/tour/${filename}`);
-
-        req.body.images.push(filename);
+        const imageFilename = `tour-images-${Date.now()}-${i + 1}.jpeg`;
+        return await uploadImage(file, imageFilename);
       })
     );
   }

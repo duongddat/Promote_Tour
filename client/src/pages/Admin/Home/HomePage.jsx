@@ -190,7 +190,7 @@ function HomePage() {
                 <div className="user-detail__info">
                   <div className="user-detail__header">
                     <img
-                      src={`http://localhost:8080/img/user/${userInfo.photo}`}
+                      src={`${userInfo.photo}`}
                       alt={userInfo.name}
                       className="user-detail__img"
                     />

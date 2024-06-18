@@ -31,7 +31,8 @@ const userSchema = new mongoose.Schema(
     address: String,
     photo: {
       type: String,
-      default: "default.jpg",
+      default:
+        "https://storage.googleapis.com/mern-tour-bc817.appspot.com/user/user-65d86afb520744909f54438c-1718616780860.jpeg",
     },
     role: {
       type: String,

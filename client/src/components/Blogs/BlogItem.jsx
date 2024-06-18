@@ -72,7 +72,7 @@ function BlogItem({ blog }) {
       <div className="row">
         <div className="col-lg-5 col-md-5 col-12">
           <img
-            src={`http://localhost:8080/img/post/${blog.photo[0]}`}
+            src={`${blog.photo[0]}`}
             alt="Blog image"
             className="blog-image"
           />
@@ -85,7 +85,7 @@ function BlogItem({ blog }) {
                 <div className="blog-user__avatar">
                   <img
                     className="user-avatar"
-                    src={`http://localhost:8080/img/user/${blog.user.photo}`}
+                    src={`${blog.user.photo}`}
                     alt={blog.user._id}
                   />
                 </div>

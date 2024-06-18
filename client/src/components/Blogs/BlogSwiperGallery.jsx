@@ -27,10 +27,7 @@ function BlogSwiperGallery({ photos }) {
           >
             {photos.map((photo, index) => (
               <SwiperSlide key={index}>
-                <img
-                  className="article-swiper-thumbs"
-                  src={`http://localhost:8080/img/post/${photo}`}
-                />
+                <img className="article-swiper-thumbs" src={`${photo}`} />
               </SwiperSlide>
             ))}
           </Swiper>
@@ -49,10 +46,7 @@ function BlogSwiperGallery({ photos }) {
           >
             {photos.map((photo, index) => (
               <SwiperSlide key={index}>
-                <img
-                  className="article-swiper-img"
-                  src={`http://localhost:8080/img/post/${photo}`}
-                />
+                <img className="article-swiper-img" src={`${photo}`} />
               </SwiperSlide>
             ))}
           </Swiper>

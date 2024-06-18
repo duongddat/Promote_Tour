@@ -9,7 +9,7 @@ function TourItem({ tour }) {
         <div className="card__picture">
           <img
             className="card__picture-img"
-            src={`http://localhost:8080/img/tour/${tour.imageCover}`}
+            src={`${tour.imageCover}`}
             alt={tour.title}
           />
         </div>

@@ -17,7 +17,7 @@ function BlogRelated({ blogs }) {
                 <div className="col-lg-5 col-md-5 col-5">
                   <img
                     className="item-related__img"
-                    src={`http://localhost:8080/img/post/${blog.photo[0]}`}
+                    src={`${blog.photo[0]}`}
                     alt="image related"
                   />
                 </div>
@@ -31,7 +31,7 @@ function BlogRelated({ blogs }) {
                         <div className="blog-user__avatar">
                           <img
                             className="user-avatar "
-                            src={`http://localhost:8080/img/user/${blog.user[0].photo}`}
+                            src={`${blog.user[0].photo}`}
                             alt={blog.user[0]._id}
                           />
                         </div>

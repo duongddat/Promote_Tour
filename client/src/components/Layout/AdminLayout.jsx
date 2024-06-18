@@ -14,7 +14,7 @@ function AdminLayout({ children }) {
         <div className="admin-header">
           <div className="admin-info">
             <div className="admin-info__image">
-              <img src={`http://localhost:8080/img/user/${userInfo.photo}`} />
+              <img src={`${userInfo.photo}`} />
             </div>
             <div className="admin-info__name">
               <h5>{userInfo.name}</h5>

@@ -108,12 +108,7 @@ function ManageUserPage() {
       },
       {
         name: "Ảnh đại diện",
-        selector: (row) => (
-          <img
-            className="table-img"
-            src={`http://localhost:8080/img/user/${row.photo}`}
-          />
-        ),
+        selector: (row) => <img className="table-img" src={`${row.photo}`} />,
       },
       {
         name: "Ngày tạo",

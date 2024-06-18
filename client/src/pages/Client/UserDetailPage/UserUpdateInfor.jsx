@@ -79,7 +79,7 @@ function UserUpdateInfor() {
                 <div className="mb-4 d-flex flex-column justify-content-center align-items-center">
                   {!avatar ? (
                     <img
-                      src={`http://localhost:8080/img/user/${loadedUser.photo}`}
+                      src={`${loadedUser.photo}`}
                       alt={loadedUser.name}
                       className="user-detail__img"
                       onClick={handleImageClick}

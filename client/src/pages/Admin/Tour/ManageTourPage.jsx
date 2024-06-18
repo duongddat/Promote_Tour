@@ -93,7 +93,7 @@ function ManageTourPage() {
         cell: (row) => (
           <img
             className="table-img"
-            src={`http://localhost:8080/img/tour/${row.imageCover}`}
+            src={`${row.imageCover}`}
             alt={`Ảnh bìa của ${row.title}`}
           />
         ),

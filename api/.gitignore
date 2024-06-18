@@ -5,6 +5,7 @@ dist
 dist-ssr
 *.local
 
+adminKey.json
 # Editor directories and files
 .vscode/*
 

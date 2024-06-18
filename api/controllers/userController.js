@@ -8,6 +8,7 @@ const Booking = require("../models/bookingModel");
 const catchAsync = require("../utils/catchAsync");
 const AIPFeatures = require("../utils/apiFeatures");
 const AppError = require("../utils/appError");
+const { bucket } = require("../config/firebase.js");
 
 //=====================CONFIGURE IMG FILE=========================
 const multerStorage = multer.memoryStorage();
@@ -38,11 +39,50 @@ exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
   const ext = req.file.mimetype.split("/")[1];
   req.file.filename = `user-${req.user.id}-${Date.now()}.${ext}`;
 
-  await sharp(req.file.buffer)
-    .resize(500, 500)
-    .toFile(`public/img/user/${req.file.filename}`);
+  req.file.buffer = await sharp(req.file.buffer).resize(500, 500).toBuffer();
 
   next();
+});
+
+exports.uploadFireBase = catchAsync(async (req, res, next) => {
+  if (!req.file) {
+    return next(new AppError("No file uploaded!", 400));
+  }
+
+  const folderName = "user";
+  const fileName = req.file.filename;
+  const filePath = `${folderName}/${fileName}`;
+
+  const file = bucket.file(filePath);
+  const stream = file.createWriteStream({
+    metadata: {
+      contentType: req.file.mimetype,
+    },
+  });
+
+  stream.on("error", (err) => {
+    console.error("Error uploading to Firebase:", err);
+    return next(new AppError("Unable to upload image", 500));
+  });
+
+  stream.on("finish", async () => {
+    try {
+      await file.makePublic();
+
+      // Lấy URL của file đã upload
+      const publicUrl = `https://storage.googleapis.com/${bucket.name}/${filePath}`;
+      // Trả về đường dẫn URL đã lưu
+      req.file.publicUrl = publicUrl;
+
+      next();
+    } catch (error) {
+      console.error("Error making file public:", error);
+      return next(new AppError("Error making file public", 500));
+    }
+  });
+
+  // Ghi buffer của ảnh vào stream
+  stream.end(req.file.buffer);
 });
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
@@ -103,7 +143,7 @@ exports.getGuide = catchAsync(async (req, res, next) => {
 });
 
 exports.createUser = catchAsync(async (req, res, next) => {
-  if (req.file) req.body.photo = req.file.filename;
+  if (req.file) req.body.photo = req.file.publicUrl;
 
   const newUser = await User.create(req.body);
 
@@ -117,7 +157,7 @@ exports.createUser = catchAsync(async (req, res, next) => {
 });
 
 exports.updateUser = catchAsync(async (req, res, next) => {
-  if (req.file) req.body.photo = req.file.filename;
+  if (req.file) req.body.photo = req.file.publicUrl;
 
   const id = req.params.id;
   const user = await User.findByIdAndUpdate(id, req.body, {
@@ -199,7 +239,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 
   //2. Filtered out unwanted fields names that are not allowed to be updated
   const filteredBody = filterObj(req.body, "name", "email", "phone", "address");
-  if (req.file) filteredBody.photo = req.file.filename;
+  if (req.file) filteredBody.photo = req.file.publicUrl;
 
   //3. Update user document
   const updateUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {

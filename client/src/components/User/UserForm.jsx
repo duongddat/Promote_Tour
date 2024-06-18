@@ -59,7 +59,7 @@ function UserForm({ isLoading, action, user = null }) {
       imagePhoto,
     } = event.target;
 
-    if (password.value !== passwordConfirm.value) {
+    if (!user && password.value !== passwordConfirm.value) {
       dispatch(
         setMessage({
           type: "error",
@@ -73,16 +73,16 @@ function UserForm({ isLoading, action, user = null }) {
     const formData = new FormData();
     formData.append("name", name.value);
     formData.append("email", email.value);
-    if (password.value) {
+    if (!user && password.value) {
       formData.append("password", password.value);
     }
-    if (passwordConfirm.value) {
+    if (!user && passwordConfirm.value) {
       formData.append("passwordConfirm", passwordConfirm.value);
     }
-    if (phone.value) {
+    if (!user && phone.value) {
       formData.append("phone", phone.value);
     }
-    if (address.value) {
+    if (!user && address.value) {
       formData.append("address", address.value);
     }
 
@@ -274,7 +274,7 @@ function UserForm({ isLoading, action, user = null }) {
             </label>
             <div className="form-img-upload__img">
               <img
-                src={`http://localhost:8080/img/user/${user.photo}`}
+                src={`${user.photo}`}
                 alt="image upload"
                 className="upload-img"
               />

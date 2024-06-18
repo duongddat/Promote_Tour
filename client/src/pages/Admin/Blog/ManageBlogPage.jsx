@@ -14,7 +14,7 @@ function ManageBlogPage() {
   const { blogs: initalData } = useLoaderData();
   const { userInfo } = useSelector((state) => state.auth);
   const [blogsData, setBlogsData] = useState(initalData.posts);
-  const [totalRows, setTotalRows] = useState(initalData.totalBlogs);
+  const [totalRows, setTotalRows] = useState(initalData.totalPosts);
   const [perPage, setPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -40,7 +40,7 @@ function ManageBlogPage() {
 
       const resData = await response.json();
       setBlogsData(resData.data.posts);
-      setTotalRows(resData.data.totalBlogs);
+      setTotalRows(resData.data.totalPosts);
     } catch (error) {
       console.error("Error fetching posts:", error);
     }

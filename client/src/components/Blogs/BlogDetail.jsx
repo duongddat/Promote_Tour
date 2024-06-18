@@ -108,7 +108,7 @@ function BlogDetail({ blog }) {
                 <div className="blog-user__avatar">
                   <img
                     className="user-avatar"
-                    src={`http://localhost:8080/img/user/${blog.user.photo}`}
+                    src={`${blog.user.photo}`}
                     alt={blog.user._id}
                   />
                 </div>

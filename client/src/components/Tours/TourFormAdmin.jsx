@@ -355,7 +355,7 @@ function TourFormAdmin({ countries, guides, action, isLoading, tour = null }) {
             <label className="form-label text-default">Ảnh bìa hiện tại:</label>
             <div className="form-img-upload__img">
               <img
-                src={`http://localhost:8080/img/tour/${tour.imageCover}`}
+                src={`${tour.imageCover}`}
                 alt="image upload"
                 className="upload-img"
               />
@@ -411,7 +411,7 @@ function TourFormAdmin({ countries, guides, action, isLoading, tour = null }) {
                 {tour.images.map((image, index) => (
                   <div key={index} className="form-img-upload__img">
                     <img
-                      src={`http://localhost:8080/img/tour/${image}`}
+                      src={`${image}`}
                       alt="image upload"
                       className="upload-img"
                     />
