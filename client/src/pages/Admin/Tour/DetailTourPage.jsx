@@ -1,6 +1,7 @@
 import { Await, Link, useLoaderData } from "react-router-dom";
 import Select from "react-select";
 import { Suspense, useEffect, useState } from "react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import headingBorderImg from "../../../assets/img/heading-border.webp";
 import { convertToSelectOptions } from "../../../helper/setValueOption";
@@ -134,7 +135,8 @@ function DetailTourPage() {
                     </label>
                     <div className="form-img-upload__imgs">
                       <div className="form-img-upload__img">
-                        <img
+                        <LazyLoadImage
+                          effect="blur"
                           src={`${tour.imageCover}`}
                           alt="image upload"
                           className="upload-img"
@@ -153,7 +155,8 @@ function DetailTourPage() {
                       <div className="form-img-upload__imgs">
                         {tour.images.map((image, index) => (
                           <div key={index} className="form-img-upload__img">
-                            <img
+                            <LazyLoadImage
+                              effect="blur"
                               src={`${image}`}
                               alt="image upload"
                               className="upload-img"

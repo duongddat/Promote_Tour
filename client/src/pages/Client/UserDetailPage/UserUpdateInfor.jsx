@@ -7,6 +7,7 @@ import headingBorderImg from "../../../assets/img/heading-border.webp";
 import { updateUserInfo } from "../../../utils/Client/https";
 import Spin from "../../../components/common/Spin";
 import { setCredentials } from "../../../store/auth-slice";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function UserUpdateInfor() {
   const { user } = useLoaderData();
@@ -78,14 +79,16 @@ function UserUpdateInfor() {
               <Form onSubmit={handleUpdateInfo}>
                 <div className="mb-4 d-flex flex-column justify-content-center align-items-center">
                   {!avatar ? (
-                    <img
+                    <LazyLoadImage
+                      effect="blur"
                       src={`${loadedUser.photo}`}
                       alt={loadedUser.name}
                       className="user-detail__img"
                       onClick={handleImageClick}
                     />
                   ) : (
-                    <img
+                    <LazyLoadImage
+                      effect="blur"
                       src={URL.createObjectURL(avatar)}
                       alt={loadedUser.name}
                       className="user-detail__img"

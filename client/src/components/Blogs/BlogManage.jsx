@@ -5,6 +5,7 @@ import bgManage from "../../assets/img/bg.webp";
 import borderAva from "../../assets/img/border-ava.png";
 import BlogList from "./BlogList";
 import { useEffect, useRef } from "react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function BlogManage({ blogs, pageNumber, setPage, onPaginate }) {
   const navigative = useNavigate();
@@ -54,12 +55,14 @@ function BlogManage({ blogs, pageNumber, setPage, onPaginate }) {
                 <div className="account-center-topbar_container">
                   <div className="account-cetner-avatar-wrap">
                     <div className="mhy-avatar">
-                      <img
+                      <LazyLoadImage
+                        effect="blur"
                         className="mhy-avatar_img"
                         src={`${userInfo.photo}`}
                         alt="user avatar"
                       />
-                      <img
+                      <LazyLoadImage
+                        effect="blur"
                         className="mhy-avatar_pendant"
                         src={borderAva}
                         alt="border image"

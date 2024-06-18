@@ -13,6 +13,7 @@ function MasonnryImageGallery() {
             src={item}
             alt={`Gallery ${index} image`}
             className="masonry-img"
+            effect="blur"
             style={{ width: "100%", display: "block", borderRadius: "10px" }}
           />
         ))}

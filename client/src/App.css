@@ -63,6 +63,11 @@ a {
 ul {
   list-style: none;
 }
+.lazy-load-image-background {
+  background: none !important;
+  display: contents !important;
+}
+
 .section-title__header {
   font-size: 30px;
   line-height: 38px;

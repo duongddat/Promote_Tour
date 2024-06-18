@@ -7,6 +7,7 @@ import "swiper/css/effect-cards";
 
 // import required modules
 import { Pagination, Autoplay } from "swiper/modules";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export default function App({ images }) {
   return (
@@ -26,8 +27,9 @@ export default function App({ images }) {
       >
         {images.map((img, i) => (
           <SwiperSlide key={i}>
-            <img
-              src={`http://localhost:8080/img/tour/${img}`}
+            <LazyLoadImage
+              effect="blur"
+              src={`${img}`}
               alt={i}
               className="img-gallery"
             />

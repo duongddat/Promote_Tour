@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import NavItem from "./NavItem";
 import DropdownItem from "./DropdownItem";
@@ -87,10 +88,11 @@ function Header() {
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
-                    <img
+                    <LazyLoadImage
                       src={`${userInfo.photo}`}
                       alt="user avatar"
                       className="nav-user-avatar"
+                      effect="blur"
                     />
                     <span>{userInfo.name}</span>
                   </button>

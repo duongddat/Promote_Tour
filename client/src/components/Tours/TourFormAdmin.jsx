@@ -8,6 +8,7 @@ import TourLocationFormAdmin from "./TourLocationFormAdmin";
 import { convertToSelectOptions } from "../../helper/setValueOption";
 import { setMessage } from "../../store/message-slice";
 import Spin from "../../components/common/Spin";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function TourFormAdmin({ countries, guides, action, isLoading, tour = null }) {
   const dispatch = useDispatch();
@@ -354,7 +355,8 @@ function TourFormAdmin({ countries, guides, action, isLoading, tour = null }) {
           <div className="mb-4">
             <label className="form-label text-default">Ảnh bìa hiện tại:</label>
             <div className="form-img-upload__img">
-              <img
+              <LazyLoadImage
+                effect="blur"
                 src={`${tour.imageCover}`}
                 alt="image upload"
                 className="upload-img"
@@ -410,7 +412,8 @@ function TourFormAdmin({ countries, guides, action, isLoading, tour = null }) {
               <div className="form-img-upload__imgs">
                 {tour.images.map((image, index) => (
                   <div key={index} className="form-img-upload__img">
-                    <img
+                    <LazyLoadImage
+                      effect="blur"
                       src={`${image}`}
                       alt="image upload"
                       className="upload-img"

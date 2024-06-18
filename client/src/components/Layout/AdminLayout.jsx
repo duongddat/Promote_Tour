@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import SideBarAdmin from "./SideBar/SideBarAdmin";
 import "./Layout.css";
@@ -14,7 +15,7 @@ function AdminLayout({ children }) {
         <div className="admin-header">
           <div className="admin-info">
             <div className="admin-info__image">
-              <img src={`${userInfo.photo}`} />
+              <LazyLoadImage effect="blur" src={`${userInfo.photo}`} />
             </div>
             <div className="admin-info__name">
               <h5>{userInfo.name}</h5>

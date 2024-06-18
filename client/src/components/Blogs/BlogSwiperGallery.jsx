@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -27,7 +28,11 @@ function BlogSwiperGallery({ photos }) {
           >
             {photos.map((photo, index) => (
               <SwiperSlide key={index}>
-                <img className="article-swiper-thumbs" src={`${photo}`} />
+                <LazyLoadImage
+                  effect="blur"
+                  className="article-swiper-thumbs"
+                  src={`${photo}`}
+                />
               </SwiperSlide>
             ))}
           </Swiper>
@@ -46,7 +51,11 @@ function BlogSwiperGallery({ photos }) {
           >
             {photos.map((photo, index) => (
               <SwiperSlide key={index}>
-                <img className="article-swiper-img" src={`${photo}`} />
+                <LazyLoadImage
+                  effect="blur"
+                  className="article-swiper-img"
+                  src={`${photo}`}
+                />
               </SwiperSlide>
             ))}
           </Swiper>

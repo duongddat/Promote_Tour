@@ -8,6 +8,8 @@ import { setCredentials } from "./store/auth-slice";
 import { useGetUserDetailsQuery } from "./store/auth-service";
 import Loading from "./shared/Loading";
 
+import "react-lazy-load-image-component/src/effects/blur.css";
+
 function App() {
   const dispatch = useDispatch();
   const { isLoading, data } = useGetUserDetailsQuery("userDetails");

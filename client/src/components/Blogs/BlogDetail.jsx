@@ -12,6 +12,7 @@ import "./Blog.css";
 import { useEffect, useState } from "react";
 import Spin from "../common/Spin";
 import ShowModal from "../common/ShowModal";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function BlogDetail({ blog }) {
   const location = useLocation();
@@ -106,7 +107,8 @@ function BlogDetail({ blog }) {
               </div>
               <div className="d-flex column-gap-3 align-items-center py-2">
                 <div className="blog-user__avatar">
-                  <img
+                  <LazyLoadImage
+                    effect="blur"
                     className="user-avatar"
                     src={`${blog.user.photo}`}
                     alt={blog.user._id}

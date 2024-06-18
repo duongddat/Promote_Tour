@@ -48,6 +48,7 @@ function Testimonial({ reviews }) {
               <LazyLoadImage
                 src={`${review.user.photo}`}
                 alt={review.user._id}
+                effect="blur"
               />
               <div className="client-data-details">
                 <h6 className="mb-0 mt-3">{review.user.name}</h6>

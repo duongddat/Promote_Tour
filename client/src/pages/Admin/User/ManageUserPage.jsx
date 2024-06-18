@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLoaderData } from "react-router-dom";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import ShowModal from "../../../components/common/ShowModal";
 import headingBorderImg from "../../../assets/img/heading-border.webp";
@@ -108,7 +109,13 @@ function ManageUserPage() {
       },
       {
         name: "Ảnh đại diện",
-        selector: (row) => <img className="table-img" src={`${row.photo}`} />,
+        selector: (row) => (
+          <LazyLoadImage
+            effect="blur"
+            className="table-img"
+            src={`${row.photo}`}
+          />
+        ),
       },
       {
         name: "Ngày tạo",

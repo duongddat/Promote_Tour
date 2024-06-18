@@ -16,6 +16,7 @@ import ServiceList from "../../../components/Service/ServiceList";
 import CountryList from "../../../components/CountryHeader/CountryList";
 import MasonnryImageGallery from "../../../components/Gallery/MasonnryImageGallery";
 import Testimonial from "../../../components/Testimonial/Testimonial";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export default function HomePage() {
   const { tours, countries, reviews } = useLoaderData();
@@ -48,7 +49,7 @@ export default function HomePage() {
             </div>
             <div className="col-lg-2 col-md-4">
               <div className="hero__img-box">
-                <img src={heroImg} alt="Hero Image" />
+                <LazyLoadImage effect="blur" src={heroImg} alt="Hero Image" />
               </div>
             </div>
             <div className="col-lg-2 col-md-4">
@@ -58,7 +59,11 @@ export default function HomePage() {
             </div>
             <div className="col-lg-2 col-md-4">
               <div className="hero__img-box mt-5-md-size">
-                <img src={heroImg02} alt="Hero Image 02" />
+                <LazyLoadImage
+                  effect="blur"
+                  src={heroImg02}
+                  alt="Hero Image 02"
+                />
               </div>
             </div>
           </div>

@@ -1,13 +1,15 @@
 import { Link } from "react-router-dom";
 import "./Tours.css";
 import { currencyFormatter } from "../../helper/formattingPrice";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function TourItem({ tour }) {
   return (
     <div className="card">
       <div className="card__header">
         <div className="card__picture">
-          <img
+          <LazyLoadImage
+            effect="blur"
             className="card__picture-img"
             src={`${tour.imageCover}`}
             alt={tour.title}

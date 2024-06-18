@@ -1,5 +1,6 @@
 import { Link, useLoaderData } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import headingBorderImg from "../../../assets/img/heading-border.webp";
 import TableData from "../../../components/Table/TableData";
@@ -91,7 +92,8 @@ function ManageTourPage() {
       {
         name: "Ảnh bìa",
         cell: (row) => (
-          <img
+          <LazyLoadImage
+            effect="blur"
             className="table-img"
             src={`${row.imageCover}`}
             alt={`Ảnh bìa của ${row.title}`}

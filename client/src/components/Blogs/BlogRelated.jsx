@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { formatVietnameseDate } from "../../helper/formattingDate";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function BlogRelated({ blogs }) {
   return (
@@ -15,7 +16,8 @@ function BlogRelated({ blogs }) {
             >
               <div className="row">
                 <div className="col-lg-5 col-md-5 col-5">
-                  <img
+                  <LazyLoadImage
+                    effect="blur"
                     className="item-related__img"
                     src={`${blog.photo[0]}`}
                     alt="image related"
@@ -29,7 +31,8 @@ function BlogRelated({ blogs }) {
                       </h5>
                       <div className="d-flex column-gap-3 align-items-center">
                         <div className="blog-user__avatar">
-                          <img
+                          <LazyLoadImage
+                            effect="blur"
                             className="user-avatar "
                             src={`${blog.user[0].photo}`}
                             alt={blog.user[0]._id}

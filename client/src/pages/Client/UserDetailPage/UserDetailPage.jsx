@@ -4,6 +4,7 @@ import { Await, Link, useLoaderData } from "react-router-dom";
 import headingBorderImg from "../../../assets/img/heading-border.webp";
 import { formatVietnameseDate } from "../../../helper/formattingDate";
 import "./UserDetailPage.css";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function UserDetailPage() {
   const { user } = useLoaderData();
@@ -26,7 +27,8 @@ function UserDetailPage() {
               </div>
               <div className="user-detail__info">
                 <div className="user-detail__header">
-                  <img
+                  <LazyLoadImage
+                    effect="blur"
                     src={`${loadedUser.photo}`}
                     alt={loadedUser.name}
                     className="user-detail__img"

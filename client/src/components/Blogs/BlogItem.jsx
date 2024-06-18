@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import parse from "html-react-parser";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import { formatVietnameseDate } from "../../helper/formattingDate";
 import ShowModal from "../common/ShowModal";
@@ -71,7 +72,8 @@ function BlogItem({ blog }) {
     <div className="card card-border">
       <div className="row">
         <div className="col-lg-5 col-md-5 col-12">
-          <img
+          <LazyLoadImage
+            effect="blur"
             src={`${blog.photo[0]}`}
             alt="Blog image"
             className="blog-image"

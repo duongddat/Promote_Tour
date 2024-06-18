@@ -1,10 +1,11 @@
+import { LazyLoadImage } from "react-lazy-load-image-component";
 import TourImgGallery from "./TourImgGallery.jsx";
 import headingBorderImg from "../../assets/img/heading-border.webp";
 import { currencyFormatter } from "../../helper/formattingPrice";
-import "./TourDetail.css";
 import MapBox from "./MapBox.jsx";
 import ReviewTour from "./ReviewTour.jsx";
 import MapBoxStart from "./MapBoxStart.jsx";
+import "./TourDetail.css";
 
 function TourDetail({ tour }) {
   const paragraphs = tour.description.split("\n");
@@ -48,8 +49,9 @@ function TourDetail({ tour }) {
           </div>
         </div>
         <div className="tour-ImgCover">
-          <img
-            src={`http://localhost:8080/img/tour/${tour.imageCover}`}
+          <LazyLoadImage
+            effect="blur"
+            src={`${tour.imageCover}`}
             alt={tour.title}
             className="img-tour__cover"
           />
@@ -112,9 +114,10 @@ function TourDetail({ tour }) {
               {tour.guides.length > 0 &&
                 tour.guides.map((guide) => (
                   <div key={guide._id} className="overview-box__detail">
-                    <img
+                    <LazyLoadImage
+                      effect="blur"
                       className="overview-box__img"
-                      src={`http://localhost:8080/img/user/${guide.photo}`}
+                      src={`${guide.photo}`}
                       alt={guide.name}
                     />
                     <div className="d-flex flex-column">
