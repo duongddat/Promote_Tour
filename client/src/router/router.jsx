@@ -22,6 +22,7 @@ import ResetPassword from "../pages/Client/ForgotPassword/ResetPassword.jsx";
 import UserDetailPage from "../pages/Client/UserDetailPage/UserDetailPage.jsx";
 import UserUpdateInfo from "../pages/Client/UserDetailPage/UserUpdateInfor.jsx";
 import UserChangePassword from "../pages/Client/UserDetailPage/UserChangePassword.jsx";
+import BookingPage from "../pages/Client/BookingPage/BookingPage.jsx";
 import SuccessCheckout from "../components/Booking/SuccessCheckout.jsx";
 import ErrorPage from "../pages/ErrorPage/ErrorPage.jsx";
 
@@ -61,6 +62,7 @@ import { loader as loadData } from "../utils/Client/loadHomeData.js";
 import { loader as loadTourData } from "../utils/Client/loadTourData.js";
 import { loader as loadTourDetailData } from "../utils/Client/loadTourDetailData.js";
 import { loader as loadUserDetail } from "../utils/Client/loadUserDetail.js";
+import { loader as loadBookingTour } from "../utils/Client/loadBookingTour.js";
 import { loader as loadSuccessCheckout } from "../utils/Client/loadSuccessCheckout.js";
 import { loader as loadBlogData } from "../utils/Client/loadBlogData.js";
 import { loader as loadBlogCreate } from "../utils/Client/loadBlogCreate.js";
@@ -163,6 +165,11 @@ const router = createBrowserRouter([
             element: <UserChangePassword />,
           },
         ],
+      },
+      {
+        path: "booking/:slug",
+        element: <BookingPage />,
+        loader: loadBookingTour,
       },
       {
         path: "checkout-success/:idBooking",

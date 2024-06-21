@@ -27,9 +27,15 @@ const RootAuthPage = ({ children }) => {
       };
 
       if (type === "success") {
-        toast.success(message, option);
+        toast.success(
+          <div style={{ whiteSpace: "pre-line" }}>{message}</div>,
+          option
+        );
       } else {
-        toast.error(message, option);
+        toast.error(
+          <div style={{ whiteSpace: "pre-line" }}>{message}</div>,
+          option
+        );
       }
     }
   }, [message, type, dispatch]);

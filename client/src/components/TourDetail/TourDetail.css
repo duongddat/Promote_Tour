@@ -9,7 +9,7 @@
 }
 
 .tour__header {
-  padding: 10px 10px 30px;
+  padding: 10px 10px 15px;
 }
 
 .tour-title {
@@ -43,7 +43,7 @@
   object-fit: cover;
   width: 100%;
   height: auto;
-  max-height: 450px;
+  max-height: 500px;
 }
 .heading-secondary {
   font-size: 24px;
@@ -99,7 +99,6 @@
   border-radius: 10px;
   width: 100%;
   height: auto;
-  max-height: 450px;
   object-fit: cover;
 }
 

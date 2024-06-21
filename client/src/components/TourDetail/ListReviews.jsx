@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import { io } from "socket.io-client";
 
 import { formatVietnameseDate } from "../../helper/formattingDate";
 import ShowModal from "../common/ShowModal";
@@ -10,19 +11,14 @@ import Spin from "../common/Spin";
 import "./ReviewTour.css";
 
 function ListReviews({ reviews, onEdit, tourId }) {
-  const location = useLocation();
   const { userInfo } = useSelector((state) => state.auth);
   const idRef = useRef();
   const [modalIsOpen, setIsOpen] = useState(false);
-  const { isLoading, action: actionDeleteReview } = useAction(
-    deleteReview,
-    location.pathname
-  );
+  const { isLoading, action: actionDeleteReview } = useAction(deleteReview);
 
   function openModal(id) {
     idRef.current = id;
     setIsOpen(true);
-    console.log(id);
   }
 
   function closeModal() {
@@ -39,6 +35,10 @@ function ListReviews({ reviews, onEdit, tourId }) {
 
     if (!isLoading) {
       closeModal();
+
+      //Socket
+      const socket = io("http://localhost:8080");
+      socket.emit("new_review", tourId);
     }
   }
 
@@ -47,9 +47,10 @@ function ListReviews({ reviews, onEdit, tourId }) {
       {reviews.map((review) => (
         <div key={review._id} className="reviews">
           <div className="review-item">
-            <img
+            <LazyLoadImage
+              effect="blur"
               className="user-avatar"
-              src={`http://localhost:8080/img/user/${review.user.photo}`}
+              src={`${review.user.photo}`}
               alt={review.user._id}
             />
             <div className="w-100">

@@ -246,6 +246,25 @@ exports.getTourBySlug = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getTourToBooking = catchAsync(async (req, res, next) => {
+  const slug = req.params.slug;
+  const tour = await Tour.findOne({ slug: slug });
+
+  if (!tour) {
+    return next(
+      new AppError("Không tìm thấy chuyến tham quan nào có slug đó", 404)
+    );
+  }
+
+  res.status(200).json({
+    status: "success",
+    message: "Truy xuất thành công",
+    data: {
+      tour,
+    },
+  });
+});
+
 exports.createTour = catchAsync(async (req, res, next) => {
   let startLocation = req.body.startLocation;
   let locations = req.body.locations;

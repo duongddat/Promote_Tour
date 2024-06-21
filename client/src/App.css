@@ -280,6 +280,9 @@ table tbody td {
 .w-max-content {
   min-width: max-content;
 }
+.w-30 {
+  min-width: 33.333%;
+}
 .w-100 {
   width: 100%;
 }

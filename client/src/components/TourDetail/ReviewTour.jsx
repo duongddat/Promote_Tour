@@ -1,6 +1,7 @@
-import { Form, useLocation, useNavigate } from "react-router-dom";
+import { Form } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useRef, useState } from "react";
+import { io } from "socket.io-client";
 
 import ListReviews from "./ListReviews";
 import { setMessage } from "../../store/message-slice";
@@ -10,10 +11,10 @@ import Spin from "../common/Spin";
 import "./ReviewTour.css";
 
 function ReviewTour({ reviews, tourId }) {
-  const navigate = useNavigate();
-  const location = useLocation();
+  // const navigate = useNavigate();
+  // const location = useLocation();
   const formRef = useRef();
-  const currentPatch = location.pathname;
+  // const currentPatch = location.pathname;
 
   const { userInfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -23,14 +24,10 @@ function ReviewTour({ reviews, tourId }) {
   const [reviewId, setReviewId] = useState("");
   const refReview = useRef();
 
-  const { isLoading: loadingCreate, action: createReviewAction } = useAction(
-    createReview,
-    currentPatch
-  );
-  const { isLoading: loadingEdit, action: editReviewAction } = useAction(
-    editReview,
-    currentPatch
-  );
+  const { isLoading: loadingCreate, action: createReviewAction } =
+    useAction(createReview);
+  const { isLoading: loadingEdit, action: editReviewAction } =
+    useAction(editReview);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -70,7 +67,10 @@ function ReviewTour({ reviews, tourId }) {
     setRating(null);
     setReviewId("");
     refReview.current.value = "";
-    navigate(currentPatch);
+
+    //Socket
+    const socket = io("http://localhost:8080");
+    socket.emit("new_review", tourId);
   }
 
   function handleEditReview(review) {

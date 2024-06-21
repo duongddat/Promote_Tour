@@ -158,7 +158,7 @@ function Booking({ tour }) {
   );
 
   return (
-    <div className="tour-content booking sticky">
+    <div className="tour-content booking">
       <div className="booking__top d-flex align-items-center jusstify-content-between flex-wrap">
         <h5 className="flex-grow-1">
           {tour.priceDiscount

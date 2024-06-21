@@ -9,6 +9,7 @@ const router = express.Router();
 router.use("/:tourId/reviews", reviewRouter);
 
 router.route("/monthy-statistic/:year").get(tourController.getMonthStatistic);
+router.route("/booking/:slug").get(tourController.getTourToBooking);
 router.route("/detail/:slug").get(tourController.getTourBySlug);
 router.route("/tour-of-country").get(tourController.countToursByCountry);
 router.route("/top-tour").get(tourController.getTopTours);

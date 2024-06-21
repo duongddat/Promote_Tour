@@ -4,8 +4,11 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const { createServer } = require("http");
+const { Server } = require("socket.io");
 
 const globalErrorHandler = require("./controllers/errorController");
+const socketReview = require("./services/socketReview");
 const authRouter = require("./routes/authRouter");
 const userRouter = require("./routes/userRouter");
 const tourRouter = require("./routes/tourRouter");
@@ -52,9 +55,29 @@ app.use("/discounts", discountRouter);
 app.use("/statis", statisticalRouter);
 
 app.use(globalErrorHandler);
+
+//Socket.io
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", (socket) => {
+  io.emit("test", "Test socket đầu tiên!!!");
+
+  socketReview(io, socket);
+
+  // socket.on("disconnect", () => {
+  //   console.log("Người dùng đã ngắt kết nối: ", socket.id);
+  // });
+});
+
 //SEVER
 const post = process.env.PORT || 8000;
-app.listen(post, () => {
+httpServer.listen(post, () => {
   connect();
   console.log(`Server running on port ${post}`);
 });

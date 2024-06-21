@@ -8,7 +8,7 @@ function MapBoxStart({ startLocation }) {
         mapLib={import("mapbox-gl")}
         mapboxAccessToken="pk.eyJ1Ijoiam9uYXNzY2htZWR0bWFubiIsImEiOiJjam54ZmM5N3gwNjAzM3dtZDNxYTVlMnd2In0.ytpI7V7w7cyT1Kq5rT9Z1A"
         style={{
-          height: 230,
+          height: 200,
           transitionDuration: 200,
           borderRadius: 10,
           border: "1px solid #ccc",

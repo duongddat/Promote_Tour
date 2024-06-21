@@ -1,0 +1,192 @@
+.stepper {
+  padding-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 50px;
+}
+
+.step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.step:not(:first-child)::before {
+  content: "";
+  background-color: #e2e8f0;
+  position: absolute;
+  width: 100%;
+  height: 5px;
+  right: 50%;
+  top: 33.333333%;
+  transform: translateY(-50%);
+}
+
+.step-number {
+  background-color: #ccc;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  position: relative;
+  border-radius: 50%;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.step-name {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.active .step-number {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.complete .step-number {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.complete:not(:first-child)::before,
+.active:not(:first-child)::before {
+  background-color: #16a34a;
+  transition: 0.2s ease;
+}
+
+.booking__top h5 {
+  font-weight: 700;
+  color: red;
+}
+
+.booking__top h5 span {
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--text-color);
+}
+
+.booking__form h5 {
+  margin-bottom: 1rem;
+}
+
+.booking__form input {
+  width: 100%;
+  padding: 0.5rem;
+  /* border-radius: 0.5rem; */
+  color: var(--heading-color);
+  font-size: 1rem;
+  border: none;
+  border-bottom: 2px solid rgb(229, 231, 235);
+}
+
+.booking__form input:focus {
+  outline: none;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.payment-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+}
+
+.comming-soon {
+  cursor: default;
+}
+
+.comming-soon .payment-item__img,
+.comming-soon h6 {
+  color: #000 !important;
+  border-color: #f7f4f4 !important;
+}
+
+.comming-soon .comming-soon__modal {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.comming-soon .comming-soon__text {
+  display: block;
+}
+
+.wrapper-payment {
+  position: relative;
+}
+
+.payment-item__img {
+  height: 120px;
+  width: 120px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 3px solid #f7f4f4;
+}
+
+.comming-soon__modal {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  border-radius: 12px;
+  z-index: 2;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+}
+
+.comming-soon__text {
+  display: none;
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  color: #fff;
+  font-weight: 500;
+}
+
+.payment-item:hover .payment-item__img,
+.active-payment .payment-item__img {
+  border-color: var(--primary-color);
+}
+
+.payment-item:hover h6,
+.active-payment h6 {
+  color: var(--primary-color);
+}
+
+.booking__bottom ul {
+  margin-bottom: 20px;
+}
+
+.booking__bottom li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.booking__bottom li h5,
+.booking__bottom li span {
+  margin-bottom: 0px;
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+.total h5,
+.total span {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.total span {
+  color: red !important;
+}

@@ -96,6 +96,10 @@
   border-radius: 16px;
 }
 
+.container-large {
+  max-width: 1050px;
+}
+
 .container-medium {
   max-width: 896px;
 }
