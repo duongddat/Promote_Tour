@@ -3,10 +3,10 @@
 import { json } from "react-router-dom";
 
 export async function loader({ request, params }) {
-  const id = params.idBooking;
-  if (!id) {
+  const booking = params.booking;
+  if (!booking) {
     throw json(
-      { message: "Could not get booking id." },
+      { message: "Could not get booking data." },
       {
         status: 401,
       }
@@ -14,7 +14,7 @@ export async function loader({ request, params }) {
   }
 
   const response = await fetch(
-    "http://localhost:8080/booking/success/?id=" + id
+    "http://localhost:8080/booking/success/?booking=" + booking
   );
 
   if (!response.ok) {

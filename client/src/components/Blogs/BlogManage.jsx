@@ -1,22 +1,30 @@
-import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 
 import bgManage from "../../assets/img/bg.webp";
 import borderAva from "../../assets/img/border-ava.png";
 import BlogList from "./BlogList";
-import { useEffect, useRef } from "react";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 
-function BlogManage({ blogs, pageNumber, setPage, onPaginate }) {
-  const navigative = useNavigate();
-  const { userInfo } = useSelector((state) => state.auth);
+function BlogManage({
+  userInfo,
+  blogs,
+  pageNumber,
+  setPage,
+  onPaginate,
+  onSocket,
+  onDeleteBlog,
+}) {
   const listRef = useRef(null);
+  const [totalLikes, setTotalLikes] = useState(0);
 
-  let totalLikes = 0;
-
-  blogs.forEach((post) => {
-    totalLikes += post.likes.length;
-  });
+  useEffect(() => {
+    let total = 0;
+    blogs.forEach((post) => {
+      total += post.likes.length;
+    });
+    setTotalLikes(total);
+  }, [blogs]);
 
   function handleScrollTopList() {
     const topPosition = listRef.current.offsetTop;
@@ -28,16 +36,6 @@ function BlogManage({ blogs, pageNumber, setPage, onPaginate }) {
     onPaginate("page", `page=${page}`);
     handleScrollTopList();
   };
-
-  useEffect(() => {
-    if (userInfo === null) {
-      navigative("/blog");
-    }
-  }, [userInfo, navigative]);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
 
   return (
     <div className="blog-manage">
@@ -83,14 +81,18 @@ function BlogManage({ blogs, pageNumber, setPage, onPaginate }) {
                         <span className="account-center-basic-num">
                           {blogs.length}
                         </span>
-                        <span className="account-center-basic-name">POST</span>
+                        <span className="account-center-basic-name">
+                          BÀI VIẾT
+                        </span>
                         <span className="account-center-basic-split">/</span>
                       </div>
                       <div className="account-center-basic-item">
                         <span className="account-center-basic-num">
                           {totalLikes}
                         </span>
-                        <span className="account-center-basic-name">LIKE</span>
+                        <span className="account-center-basic-name">
+                          YÊU THÍCH
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -113,6 +115,8 @@ function BlogManage({ blogs, pageNumber, setPage, onPaginate }) {
                 blogs={blogs}
                 pageNumber={pageNumber}
                 onPaginate={handlePagination}
+                onSocket={onSocket}
+                onDeleteBlog={onDeleteBlog}
               />
             </div>
             <div className="col-xl-3 col-lg-3 col-md-12 col-sm-12">

@@ -2,7 +2,14 @@ import Pagination from "../Pagination/Pagination";
 import BlogItem from "./BlogItem";
 import noDataMessage from "../../assets/img/no-data-message.png";
 
-function BlogList({ blogs, pageNumber, pageCurrent, onPaginate }) {
+function BlogList({
+  blogs,
+  pageNumber,
+  pageCurrent,
+  onPaginate,
+  onSocket,
+  onDeleteBlog,
+}) {
   const handlePageClick = (event) => {
     const page = event.selected + 1;
     onPaginate(page);
@@ -15,7 +22,11 @@ function BlogList({ blogs, pageNumber, pageCurrent, onPaginate }) {
           <div className="row row-gap-4 mb-4">
             {blogs.map((blog) => (
               <div key={blog._id} className="col-lg-12 col-md-12 col-12">
-                <BlogItem blog={blog} />
+                <BlogItem
+                  blog={blog}
+                  onSocket={onSocket}
+                  onDeleteBlog={onDeleteBlog}
+                />
               </div>
             ))}
           </div>

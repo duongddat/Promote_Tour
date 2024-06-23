@@ -30,10 +30,6 @@ const bookingSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
-  paid: {
-    type: Boolean,
-    default: false,
-  },
   cancelled: {
     type: Boolean,
     default: false,
@@ -59,14 +55,6 @@ bookingSchema.pre("save", function (next) {
   if (bookingDate.isBefore(currentDate, "day")) {
     return next(new AppError("Ngày đặt không thể là ngày trong quá khứ.", 400));
   }
-  next();
-});
-
-bookingSchema.pre(/^find/, async function (next) {
-  await this.model.deleteMany({
-    paid: false,
-  });
-
   next();
 });
 

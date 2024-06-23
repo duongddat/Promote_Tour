@@ -139,3 +139,39 @@
 .user-review_tool i:hover {
   color: var(--primary-color);
 }
+
+.tour-related {
+  width: 100%;
+}
+
+.tour-ralated__bottom {
+  position: absolute;
+  bottom: 0;
+  transform: translateY(0);
+  height: 30%;
+  width: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.5) 50%,
+    rgba(0, 0, 0, 1) 100%
+  );
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  text-align: center;
+  padding: 2px 5px;
+}
+
+.tour-ralated__bottom h6 {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #fff;
+  margin-bottom: 0;
+}
+
+.tour-related__price {
+  color: red;
+  font-weight: 700;
+}

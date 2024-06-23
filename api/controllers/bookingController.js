@@ -21,14 +21,16 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   const discountedPrice = totalPrice - applyDiscount;
   const parsedDate = moment(bookAt, "DD/MM/YYYY").toDate();
 
-  //Save booking tour
-  const booking = await Booking.create({
+  //1. Create booking tour
+  const booking = new Booking({
     tour: tour._id,
     user: req.user._id,
     guestSize,
     bookAt: parsedDate,
     price: discountedPrice,
   });
+  const bookingString = JSON.stringify(booking);
+  const encodeURL = encodeURIComponent(bookingString);
 
   //2. Create checkout session
   const session = await stripe.checkout.sessions.create({
@@ -45,16 +47,14 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
             description: `Ngày khởi hành: ${bookAt} -:- Số lượng người: ${guestSize} x ${
               tour.priceDiscount || tour.price
             } đồng ${discount !== 0 ? `-:- Giảm giá: ${discount} %` : ""}`,
-            images: [
-              "https://th.bing.com/th/id/R.2f032c6dcc681900ed91ba67a1504191?rik=tuEQwJWELIZOsQ&riu=http%3a%2f%2fwww.trickstrend.com%2fwp-content%2fuploads%2f2020%2f03%2fOnline-Travel-Booking-Market.jpg&ehk=PwTXvBzVMtbSPf8IsxIL%2bv24xUpqqYtj7LNX90ppFVE%3d&risl=&pid=ImgRaw&r=0",
-            ],
+            images: [tour.imageCover],
           },
         },
         quantity: 1,
       },
     ],
     mode: "payment",
-    success_url: `${process.env.CLIENT_SITE_URL}/checkout-success/${booking._id}`,
+    success_url: `${process.env.CLIENT_SITE_URL}/checkout-success/${encodeURL}`,
     cancel_url: `${process.env.CLIENT_SITE_URL}/tours/detail/${tour.slug}`,
   });
 
@@ -76,16 +76,15 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 });
 
 exports.paidTour = catchAsync(async (req, res, next) => {
-  const updateBooking = await Booking.updateOne(
-    { _id: req.query.id },
-    {
-      paid: true,
-    },
-    { new: true }
-  );
+  const booking = JSON.parse(decodeURIComponent(req.query.booking));
 
-  if (!updateBooking.acknowledged) {
-    return next(new AppError("Vui lòng thử lại sau!!!", 401));
+  if (!booking) {
+    return next(new AppError("Không thể đặt tour! Vui lòng thử lại sau", 404));
+  }
+
+  const savedBooking = await Booking.create(booking);
+  if (!savedBooking) {
+    return next(new AppError("Không thể lưu tour! Vui lòng thử lại sau", 500));
   }
 
   res.status(200).json({

@@ -17,10 +17,29 @@ async function loadTourDetail(slug) {
   }
 }
 
+async function loadRelatedTours(slug) {
+  const response = await fetch(
+    "http://localhost:8080/tours/related-tour/" + slug
+  );
+
+  if (!response.ok) {
+    throw json(
+      { message: "Could not fetch related tours for selected tour." },
+      {
+        status: 500,
+      }
+    );
+  } else {
+    const resData = await response.json();
+    return resData.data.relatedTour;
+  }
+}
+
 export async function loader({ request, params }) {
   const slug = params.slug;
 
   return defer({
     tour: await loadTourDetail(slug),
+    relatedTours: await loadRelatedTours(slug),
   });
 }

@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import parse from "html-react-parser";
@@ -20,23 +20,20 @@ function truncateDescription(description, maxLength) {
     : description;
 }
 
-function BlogItem({ blog }) {
-  const location = useLocation();
+function BlogItem({ blog, onSocket, onDeleteBlog }) {
+  // const location = useLocation();
   const dispatch = useDispatch();
   const [modalIsOpen, setIsOpen] = useState(false);
   const { userInfo } = useSelector((state) => state.auth);
-  const { action } = useAction(likeBlog, location.pathname);
-  const { isLoading, action: actionDeleteBlog } = useAction(
-    deleteBlog,
-    location.pathname
-  );
+  const { action } = useAction(likeBlog, null, false);
+  const { isLoading, action: actionDeleteBlog } = useAction(deleteBlog);
 
   const liked = userInfo && blog.likes.includes(userInfo._id);
 
   const truncatedDescription = truncateDescription(blog.description);
   const parsedDescription = parse(truncatedDescription);
 
-  function handleLikeBlog() {
+  async function handleLikeBlog() {
     if (!userInfo) {
       dispatch(
         setMessage({
@@ -45,7 +42,10 @@ function BlogItem({ blog }) {
         })
       );
     }
-    action({ blogId: blog._id });
+    await action({ blogId: blog._id });
+
+    //socket.io
+    onSocket();
   }
 
   function openModal() {
@@ -56,16 +56,13 @@ function BlogItem({ blog }) {
     setIsOpen(false);
   }
 
-  function loadingAction() {
-    if (isLoading) {
+  async function handleDeleteBlog(blogId) {
+    await actionDeleteBlog(blogId);
+    onDeleteBlog();
+
+    if (!isLoading) {
       closeModal();
     }
-  }
-
-  function handleDeleteBlog(blogId) {
-    actionDeleteBlog(blogId);
-
-    loadingAction();
   }
 
   return (

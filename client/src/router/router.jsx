@@ -172,7 +172,7 @@ const router = createBrowserRouter([
         loader: loadBookingTour,
       },
       {
-        path: "checkout-success/:idBooking",
+        path: "checkout-success/:booking",
         element: <SuccessCheckout />,
         loader: loadSuccessCheckout,
       },

@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setMessage } from "../store/message-slice";
 
-export function useAction(actionFn, navigateRoute = null) {
+export function useAction(actionFn, navigateRoute = null, showToast = true) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
@@ -13,20 +13,23 @@ export function useAction(actionFn, navigateRoute = null) {
     try {
       const resData = await actionFn(argument);
       if (resData.status === 204) {
-        dispatch(
-          setMessage({ type: "success", message: "Xoá dữ liệu thành công!" })
-        );
+        showToast &&
+          dispatch(
+            setMessage({ type: "success", message: "Xoá dữ liệu thành công!" })
+          );
       } else {
-        dispatch(
-          setMessage({ type: resData.status, message: resData.message })
-        );
+        showToast &&
+          dispatch(
+            setMessage({ type: resData.status, message: resData.message })
+          );
       }
       if ((resData.status === "success" || resData.ok) && navigateRoute) {
         navigate(navigateRoute);
       }
     } catch (error) {
       console.log(error);
-      dispatch(setMessage({ type: "error", message: error.message }));
+      showToast &&
+        dispatch(setMessage({ type: "error", message: error.message }));
     }
 
     setIsLoading(false);

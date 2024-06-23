@@ -89,6 +89,7 @@ function CheckOutStepper({ stepsConfig = [], tour = {} }) {
   const emailRef = useRef(null);
   const dateRef = useRef(null);
   const guestSizeRef = useRef(null);
+  const stepRef = useRef();
 
   useEffect(() => {
     setSessionStorage("paymentStep", currentStep);
@@ -297,6 +298,11 @@ function CheckOutStepper({ stepsConfig = [], tour = {} }) {
         return prevStep + 1;
       }
     });
+
+    if (stepRef.current) {
+      const topPosition = stepRef.current.offsetTop;
+      window.scrollTo({ top: topPosition - 100, behavior: "smooth" });
+    }
   }
 
   function handlePreStep() {
@@ -305,11 +311,16 @@ function CheckOutStepper({ stepsConfig = [], tour = {} }) {
         return prevStep - 1;
       }
     });
+
+    if (stepRef.current) {
+      const topPosition = stepRef.current.offsetTop;
+      window.scrollTo({ top: topPosition - 100, behavior: "smooth" });
+    }
   }
 
   return (
     <>
-      <div className="stepper">
+      <div className="stepper" ref={stepRef}>
         {stepsConfig.map((step, index) => (
           <div
             key={index}

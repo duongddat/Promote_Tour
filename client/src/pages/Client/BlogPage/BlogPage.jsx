@@ -1,6 +1,7 @@
 import { Link, useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { io } from "socket.io-client";
 
 import Subtitle from "../../../shared/Subtitle";
 import headingBorderImg from "../../../assets/img/heading-border.webp";
@@ -21,8 +22,27 @@ function BlogPage() {
   const [blogsData, setBlogsData] = useState([]);
   const [totalPage, setTotalPage] = useState(1);
   const [loading, setLoading] = useState(false);
-
   const listRef = useRef(null);
+
+  //Socket
+  const [blogRelateTime, setBlogRelateTime] = useState([]);
+  const socketRef = useRef(null);
+
+  useEffect(() => {
+    socketRef.current = io("http://localhost:8080");
+
+    socketRef.current.on("update_posts", (updatedPosts) => {
+      setBlogRelateTime(updatedPosts);
+    });
+  }, []);
+
+  function handleSocketPost() {
+    if (socketRef.current) {
+      socketRef.current.emit("like_posts", page, 6);
+    }
+  }
+
+  const displayBlogs = blogRelateTime.length !== 0 ? blogRelateTime : blogs;
 
   const loadBlogData = useCallback(async (slug = "", requestUrl = "") => {
     try {
@@ -110,6 +130,15 @@ function BlogPage() {
     [page, loadBlogData, slug]
   );
 
+  function handleCheckPageToDelete() {
+    if (blogsData.length === 1 && page > 1) {
+      setPage((prevPage) => prevPage - 1);
+      updateQuery("page", `page=${page - 1}`);
+    }
+
+    updateQuery("page", `page=${page}`);
+  }
+
   return (
     <section className="section-bg">
       <div className="container">
@@ -138,10 +167,12 @@ function BlogPage() {
               <h5 className="text-center mt-5">Đang tải......</h5>
             ) : (
               <BlogList
-                blogs={blogsData}
+                blogs={displayBlogs}
                 pageNumber={totalPage}
                 currentPage={page}
                 onPaginate={handlePagination}
+                onSocket={handleSocketPost}
+                onDeleteBlog={handleCheckPageToDelete}
               />
             )}
           </div>

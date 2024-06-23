@@ -15,7 +15,6 @@ function TourDetail({ tour }) {
   const paragraphs = tour.description.split("\n");
 
   useEffect(() => {
-    console.log("Tour detail");
     const socket = io("http://localhost:8080");
 
     socket.on("update_reviews", (newTour) => {

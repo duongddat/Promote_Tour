@@ -50,7 +50,6 @@ function ReviewTour({ reviews, tourId }) {
     }
 
     if (reviewId !== "") {
-      console.log("hahahah");
       await editReviewAction({
         review: review,
         rating: rating,

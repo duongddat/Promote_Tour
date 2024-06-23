@@ -1,5 +1,6 @@
 const multer = require("multer");
 const sharp = require("sharp");
+const { default: mongoose } = require("mongoose");
 
 const Tour = require("../models/tourModel");
 const Country = require("../models/countryModel");
@@ -261,6 +262,56 @@ exports.getTourToBooking = catchAsync(async (req, res, next) => {
     message: "Truy xuất thành công",
     data: {
       tour,
+    },
+  });
+});
+
+exports.getRelatedTours = catchAsync(async (req, res, next) => {
+  const slug = req.params.slug;
+  const tour = await Tour.findOne({ slug: slug });
+
+  if (!tour) {
+    return next(
+      new AppError("Không tìm thấy chuyến tham quan nào có slug đó", 404)
+    );
+  }
+
+  const relatedTour = await Tour.aggregate([
+    {
+      $match: {
+        _id: { $ne: new mongoose.Types.ObjectId(tour._id) },
+        country: tour.country._id,
+      },
+    },
+    { $sample: { size: 3 } },
+    {
+      $project: {
+        duration: 0,
+        maxGroupSize: 0,
+        images: 0,
+        description: 0,
+        startLocation: 0,
+        locations: 0,
+        guides: 0,
+        createdAt: 0,
+        updatedAt: 0,
+      },
+    },
+    {
+      $lookup: {
+        from: "countries",
+        localField: "country",
+        foreignField: "_id",
+        as: "country",
+      },
+    },
+  ]);
+
+  res.status(200).json({
+    status: "success",
+    message: "Truy xuất thành công",
+    data: {
+      relatedTour,
     },
   });
 });

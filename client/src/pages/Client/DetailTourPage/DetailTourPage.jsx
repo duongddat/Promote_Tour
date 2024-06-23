@@ -2,9 +2,10 @@ import { Await, Link, useLoaderData } from "react-router-dom";
 import { Suspense, useEffect } from "react";
 
 import TourDetail from "../../../components/TourDetail/TourDetail";
+import RelatedTours from "../../../components/TourDetail/RelatedTours";
 
 function DetailTourPage() {
-  const { tour } = useLoaderData();
+  const { tour, relatedTours } = useLoaderData();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -43,6 +44,15 @@ function DetailTourPage() {
                   </Link>
                 </div>
               </div>
+              <Suspense
+                fallback={
+                  <p style={{ textAlign: "center" }}>Loading Related Tour...</p>
+                }
+              >
+                <Await resolve={relatedTours}>
+                  {(loadedTour) => <RelatedTours relatedTours={loadedTour} />}
+                </Await>
+              </Suspense>
             </div>
           </div>
         </div>

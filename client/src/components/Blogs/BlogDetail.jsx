@@ -1,6 +1,9 @@
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import parse from "html-react-parser";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import { io } from "socket.io-client";
 
 import { formatVietnameseDate } from "../../helper/formattingDate";
 import BlogSwiperGallery from "./BlogSwiperGallery";
@@ -9,29 +12,39 @@ import { setMessage } from "../../store/message-slice";
 import { useAction } from "../../hooks/useAction";
 import { deleteBlog, likeBlog } from "../../utils/Client/https";
 import "./Blog.css";
-import { useEffect, useState } from "react";
 import Spin from "../common/Spin";
 import ShowModal from "../common/ShowModal";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function BlogDetail({ blog }) {
   const location = useLocation();
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
+  const [blogData, setBlogData] = useState(blog);
+  const [liked, setLiked] = useState(
+    userInfo && blog.likes.includes(userInfo._id)
+  );
   const [modalIsOpen, setIsOpen] = useState(false);
-  const { action } = useAction(likeBlog, location.pathname);
+  const { action } = useAction(likeBlog, null, false);
   const { isLoading, action: actionDeleteBlog } = useAction(
     deleteBlog,
     "/blog/manage"
   );
+  const socketRef = useRef(null);
+
+  useEffect(() => {
+    socketRef.current = io("http://localhost:8080");
+
+    socketRef.current.on("update_post_detail", (updatedPost) => {
+      setBlogData(updatedPost);
+      setLiked(userInfo && updatedPost.likes.includes(userInfo._id));
+    });
+  }, [userInfo]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  const liked = userInfo && blog.likes.includes(userInfo._id);
-
-  function handleLikeBlog() {
+  async function handleLikeBlog() {
     if (!userInfo) {
       dispatch(
         setMessage({
@@ -40,7 +53,11 @@ function BlogDetail({ blog }) {
         })
       );
     }
-    action({ blogId: blog._id });
+    await action({ blogId: blog._id });
+
+    if (socketRef.current) {
+      socketRef.current.emit("like_post_detail", blog._id);
+    }
   }
 
   function openModal() {
@@ -51,16 +68,12 @@ function BlogDetail({ blog }) {
     setIsOpen(false);
   }
 
-  function loadingAction() {
-    if (isLoading) {
+  async function handleDeleteBlog(blogId) {
+    await actionDeleteBlog(blogId);
+
+    if (!isLoading) {
       closeModal();
     }
-  }
-
-  function handleDeleteBlog(blogId) {
-    actionDeleteBlog(blogId);
-
-    loadingAction();
   }
 
   return (
@@ -70,9 +83,9 @@ function BlogDetail({ blog }) {
           <div className="blog-detail__title mt-3">
             <div className="d-flex flex-column gap-8">
               <div className="d-flex justify-content-between align-items-center">
-                <h5 className="section-title__header">{blog.title}</h5>
+                <h5 className="section-title__header">{blogData.title}</h5>
                 {userInfo &&
-                  (userInfo._id === blog.user._id ||
+                  (userInfo._id === blogData.user._id ||
                     userInfo.role === "admin") && (
                     <div className="dropdown">
                       <i
@@ -81,11 +94,11 @@ function BlogDetail({ blog }) {
                         aria-expanded="false"
                       ></i>
                       <ul className="dropdown-menu dropdown-menu-end mt-2">
-                        {userInfo._id === blog.user._id && (
+                        {userInfo._id === blogData.user._id && (
                           <>
                             <li>
                               <Link
-                                to={`/blog/edit/${blog._id}`}
+                                to={`/blog/edit/${blogData._id}`}
                                 className="dropdown-item"
                               >
                                 Chỉnh sửa
@@ -110,14 +123,14 @@ function BlogDetail({ blog }) {
                   <LazyLoadImage
                     effect="blur"
                     className="user-avatar"
-                    src={`${blog.user.photo}`}
-                    alt={blog.user._id}
+                    src={`${blogData.user.photo}`}
+                    alt={blogData.user._id}
                   />
                 </div>
                 <div className="d-flex flex-column ">
-                  <h5 className="md mb-1">{blog.user.name}</h5>
+                  <h5 className="md mb-1">{blogData.user.name}</h5>
                   <span className="sm blog-date">
-                    {formatVietnameseDate(blog.createdAt)}
+                    {formatVietnameseDate(blogData.createdAt)}
                   </span>
                 </div>
               </div>
@@ -127,21 +140,23 @@ function BlogDetail({ blog }) {
             </div>
           </div>
           <div className="blog-detail__body">
-            <BlogSwiperGallery photos={blog.photo} />
+            <BlogSwiperGallery photos={blogData.photo} />
             <div>
               <img src={headingBorderImg} alt="Heading Border Image" />
             </div>
             <div className="mhy-text__detail mb-2">
               <h5>Nội dung:</h5>
-              <div className="text-description">{parse(blog.description)}</div>
+              <div className="text-description">
+                {parse(blogData.description)}
+              </div>
             </div>
             <div className="mhy-text__detail">
               <h5 className="mb-3">Chủ đề:</h5>
               <Link
-                to={`/blog/country/${blog.country.slug}`}
+                to={`/blog/country/${blogData.country.slug}`}
                 className="blog-country sm tag"
               >
-                # {blog.country.name}
+                # {blogData.country.name}
               </Link>
             </div>
           </div>
@@ -162,7 +177,7 @@ function BlogDetail({ blog }) {
                   <span className="blog-like__text">
                     {liked ? "Liked" : "Like"}
                   </span>
-                  <span>{blog.likes.length}</span>
+                  <span>{blogData.likes.length}</span>
                 </div>
               </div>
               <p className="mt-5 text-center text-footer-font">That all~</p>
@@ -180,7 +195,7 @@ function BlogDetail({ blog }) {
           </div>
           <div className="d-flex justify-content-center align-items-center column-gap-3 mt-4">
             <button
-              onClick={() => handleDeleteBlog(blog._id)}
+              onClick={() => handleDeleteBlog(blogData._id)}
               className="button text-white"
               disabled={isLoading}
             >

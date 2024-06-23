@@ -9,6 +9,7 @@ const { Server } = require("socket.io");
 
 const globalErrorHandler = require("./controllers/errorController");
 const socketReview = require("./services/socketReview");
+const socketPost = require("./services/socketPost");
 const authRouter = require("./routes/authRouter");
 const userRouter = require("./routes/userRouter");
 const tourRouter = require("./routes/tourRouter");
@@ -69,6 +70,7 @@ io.on("connection", (socket) => {
   io.emit("test", "Test socket đầu tiên!!!");
 
   socketReview(io, socket);
+  socketPost(io, socket);
 
   // socket.on("disconnect", () => {
   //   console.log("Người dùng đã ngắt kết nối: ", socket.id);
