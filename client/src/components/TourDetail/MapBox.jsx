@@ -7,7 +7,7 @@ function MapBox({ locations, heightMap }) {
     <div className="map-container">
       <Map
         mapLib={import("mapbox-gl")}
-        mapboxAccessToken="pk.eyJ1Ijoiam9uYXNzY2htZWR0bWFubiIsImEiOiJjam54ZmM5N3gwNjAzM3dtZDNxYTVlMnd2In0.ytpI7V7w7cyT1Kq5rT9Z1A"
+        mapboxAccessToken={import.meta.env.VITE_MAP_BOX_KEY}
         style={{
           height: heightMap,
           transitionDuration: 200,
@@ -19,7 +19,7 @@ function MapBox({ locations, heightMap }) {
           latitude: `${locations[0].coordinates[0]}`,
           zoom: 5,
         }}
-        mapStyle="mapbox://styles/mapbox/streets-v9"
+        mapStyle="mapbox://styles/mapbox/streets-v12"
       >
         {locations.map((location, index) => (
           <Fragment key={index}>

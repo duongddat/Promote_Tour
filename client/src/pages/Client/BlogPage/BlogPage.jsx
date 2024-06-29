@@ -29,7 +29,7 @@ function BlogPage() {
   const socketRef = useRef(null);
 
   useEffect(() => {
-    socketRef.current = io("http://localhost:8080");
+    socketRef.current = io(import.meta.env.VITE_API_SITE_URL);
 
     socketRef.current.on("update_posts", (updatedPosts) => {
       setBlogRelateTime(updatedPosts);

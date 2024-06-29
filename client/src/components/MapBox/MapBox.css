@@ -1,0 +1,29 @@
+/* GeoCoder*/
+.mapboxgl-ctrl-geocoder--input:focus {
+  border: 1px solid var(--primary-color);
+}
+
+/* MapBoxPoint */
+.map-location {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.map-location__name {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.mapbox-location__point {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-color);
+  margin-bottom: 0;
+}
+
+.map-location__icon {
+  cursor: pointer;
+}

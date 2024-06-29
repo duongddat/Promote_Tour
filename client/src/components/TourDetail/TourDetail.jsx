@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { io } from "socket.io-client";
+import parse from "html-react-parser";
 
 import TourImgGallery from "./TourImgGallery.jsx";
 import headingBorderImg from "../../assets/img/heading-border.webp";
@@ -8,19 +9,29 @@ import { currencyFormatter } from "../../helper/formattingPrice";
 import MapBox from "./MapBox.jsx";
 import ReviewTour from "./ReviewTour.jsx";
 import MapBoxStart from "./MapBoxStart.jsx";
+import noDataMessage from "../../assets/img/no-data-message.png";
+import ShowModal from "../common/ShowModal.jsx";
 import "./TourDetail.css";
 
 function TourDetail({ tour }) {
   const [tourData, setTourData] = useState(tour);
-  const paragraphs = tour.description.split("\n");
+  const [modalIsOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const socket = io("http://localhost:8080");
+    const socket = io(import.meta.env.VITE_API_SITE_URL);
 
     socket.on("update_reviews", (newTour) => {
       setTourData(newTour);
     });
   }, []);
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
 
   return (
     <>
@@ -216,15 +227,16 @@ function TourDetail({ tour }) {
             <div className="mb-3">
               <img src={headingBorderImg} alt="Heading Border Image" />
             </div>
-            {paragraphs.map((para, index) => (
-              <p key={index} className="description__text">
-                {para}
-              </p>
-            ))}
+            <div className="description__text  ql-editor">
+              {parse(tour.description)}
+            </div>
+            <div className="text-detail" onClick={() => openModal()}>
+              {">> Xem bản đồ"}
+            </div>
           </div>
         </div>
         {/* ======================Gallery section (start)=========================== */}
-        <div className="p-2">
+        <div className="p-2 mb-4">
           <h4 className="heading-secondary">Giới thiệu</h4>
           <div className="mb-3">
             <img src={headingBorderImg} alt="Heading Border Image" />
@@ -239,22 +251,6 @@ function TourDetail({ tour }) {
           )}
         </div>
         {/* =====================Gallery section (end)====================== */}
-        {/* =========================Map section (start)========================== */}
-        <div className="my-4 p-2">
-          <h4 className="heading-secondary">Bản đồ và lịch trình</h4>
-          <div className="mb-3">
-            <img src={headingBorderImg} alt="Heading Border Image" />
-          </div>
-          {tourData.locations.length > 0 && (
-            <MapBox locations={tourData.locations} heightMap={400} />
-          )}
-          {tourData.locations.length === 0 && (
-            <div className="text-center md text-message">
-              Đang cập nhật địa điểm...
-            </div>
-          )}
-        </div>
-        {/* =======================Map section (end)================================ */}
       </div>
       <div className="tour-content mt-3">
         {/* =======================Review section(start)============================ */}
@@ -269,6 +265,30 @@ function TourDetail({ tour }) {
         </div>
         {/* =======================Review section (end)============================= */}
       </div>
+      {/* =========================Map section (start)========================== */}
+      <ShowModal isOpen={modalIsOpen} onClose={closeModal}>
+        <div className="p-3 modal-container">
+          <div className="modal-close">
+            <i className="ri-close-circle-fill" onClick={closeModal}></i>
+          </div>
+          <div className="modal-content map-content">
+            <h4 className="heading-secondary">Bản đồ</h4>
+            <div className="mb-3">
+              <img src={headingBorderImg} alt="Heading Border Image" />
+            </div>
+            {tourData.locations.length > 0 && (
+              <MapBox locations={tourData.locations} heightMap={400} />
+            )}
+            {tourData.locations.length === 0 && (
+              <div className="mhy-data-lg medium-heigth">
+                <img src={noDataMessage} alt="No data" />
+                <p className="mhy-data-lg_text">Đang cập nhật địa điểm~</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </ShowModal>
+      {/* =======================Map section (end)================================ */}
     </>
   );
 }

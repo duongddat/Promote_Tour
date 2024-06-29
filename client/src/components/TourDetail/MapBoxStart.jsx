@@ -6,7 +6,7 @@ function MapBoxStart({ startLocation }) {
     <div className="map-container">
       <Map
         mapLib={import("mapbox-gl")}
-        mapboxAccessToken="pk.eyJ1Ijoiam9uYXNzY2htZWR0bWFubiIsImEiOiJjam54ZmM5N3gwNjAzM3dtZDNxYTVlMnd2In0.ytpI7V7w7cyT1Kq5rT9Z1A"
+        mapboxAccessToken={import.meta.env.VITE_MAP_BOX_KEY}
         style={{
           height: 200,
           transitionDuration: 200,
@@ -18,7 +18,7 @@ function MapBoxStart({ startLocation }) {
           latitude: `${startLocation.coordinates[0]}`,
           zoom: 10,
         }}
-        mapStyle="mapbox://styles/mapbox/streets-v9"
+        mapStyle="mapbox://styles/mapbox/streets-v12"
       >
         <Marker
           latitude={startLocation.coordinates[0]}

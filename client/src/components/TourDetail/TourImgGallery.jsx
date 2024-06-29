@@ -26,11 +26,11 @@ export default function App({ images }) {
         className="mySwiper"
       >
         {images.map((img, i) => (
-          <SwiperSlide key={i}>
+          <SwiperSlide key={`Image + ${i}`}>
             <LazyLoadImage
               effect="blur"
               src={`${img}`}
-              alt={i}
+              alt={`Image + ${i}`}
               className="img-gallery"
             />
           </SwiperSlide>

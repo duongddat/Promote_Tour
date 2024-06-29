@@ -22,12 +22,9 @@ function AdminLayout({ children }) {
               <span>Role: {userInfo.role}</span>
             </div>
           </div>
-          <div className="button h-100">
-            <Link to="/" className="fw-bold">
-              <span>HoYoViVu client</span>{" "}
-              <i className="ri-arrow-right-line"></i>
-            </Link>
-          </div>
+          <Link to="/" className="fw-bold button h-100">
+            <span>HoYoViVu client</span> <i className="ri-arrow-right-line"></i>
+          </Link>
         </div>
         {children}
         <div className="layout-admin__footer">

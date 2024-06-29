@@ -54,15 +54,21 @@
 .description-box .description__text {
   font-size: 16px;
   text-align: justify;
-  color: var(--text-color);
-}
-.description__text::before {
-  content: "";
-  margin: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .description-box .description__text:not(:last-child) {
   margin-bottom: 1rem;
+}
+
+.description-box .ql-editor {
+  padding: 0;
+}
+
+.medium-heigth {
+  min-height: auto !important;
 }
 
 .overview-box__detail {
@@ -174,4 +180,27 @@
 .tour-related__price {
   color: red;
   font-weight: 700;
+}
+
+.text-detail {
+  color: var(--text-color);
+  font-style: italic;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+}
+
+.text-detail::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  border-bottom: 2px dashed;
+  transform: translateY(2px);
+}
+
+.text-detail:hover {
+  color: var(--primary-color);
 }

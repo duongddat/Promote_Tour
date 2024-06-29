@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { setMessage } from "../../store/message-slice";
 
-function TourLocationFormAdmin({ onSubmit }) {
+function TourLocationFormAdmin({ onSubmit, onMapBoxPoint, openPoint }) {
   const dispatch = useDispatch();
+  const location = useSelector((state) => state.location);
 
   const [locationData, setLocationData] = useState({
     locationLong: "",
@@ -12,6 +13,16 @@ function TourLocationFormAdmin({ onSubmit }) {
     locationDay: "",
     locationDescription: "",
   });
+
+  useEffect(() => {
+    if (openPoint === "LOCATIONS" && location) {
+      setLocationData({
+        locationLong: location.lng,
+        locationLat: location.lat,
+        locationDescription: location.name,
+      });
+    }
+  }, [location, openPoint]);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -126,7 +137,7 @@ function TourLocationFormAdmin({ onSubmit }) {
           />
         </div>
       </div>
-      <div className="w-100 text-center">
+      <div className="d-flex flex-wrap justify-content-center align-items-center gap-3">
         <button
           type="button"
           className="button btn-submit"
@@ -134,6 +145,12 @@ function TourLocationFormAdmin({ onSubmit }) {
         >
           Thêm địa điểm
         </button>
+        <div
+          className="button btn-submit action-btn__detail"
+          onClick={() => onMapBoxPoint("LOCATIONS")}
+        >
+          Mở bản đồ
+        </div>
       </div>
     </div>
   );

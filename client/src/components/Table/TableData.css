@@ -67,3 +67,7 @@
 .action-btn__delete {
   background-color: red;
 }
+
+.action-btn__detail:hover {
+  background-color: #359375;
+}

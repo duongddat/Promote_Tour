@@ -1,0 +1,13 @@
+.ql-editor p {
+  font-size: 16px;
+  text-align: justify;
+}
+
+.ql-editor h2,
+.ql-editor h3 {
+  font-size: 16px;
+}
+
+.ql-editor ul > li {
+  margin-bottom: 5px;
+}

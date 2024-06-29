@@ -31,7 +31,7 @@ function RelatedTours({ relatedTours }) {
             className="mySwiper"
           >
             {relatedTours.map((tour, i) => (
-              <SwiperSlide key={i}>
+              <SwiperSlide key={`${i}`}>
                 <Link
                   to={`/tours/detail/${tour.slug}`}
                   className="tour-related"

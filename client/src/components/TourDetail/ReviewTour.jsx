@@ -68,7 +68,7 @@ function ReviewTour({ reviews, tourId }) {
     refReview.current.value = "";
 
     //Socket
-    const socket = io("http://localhost:8080");
+    const socket = io(import.meta.env.VITE_API_SITE_URL);
     socket.emit("new_review", tourId);
   }
 

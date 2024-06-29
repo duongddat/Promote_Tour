@@ -50,28 +50,28 @@ function Chat() {
     }
   }, [location]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (window.kommunicate) {
-        let info = {};
-        if (userInfo) {
-          info = {
-            userId: userInfo._id,
-            displayName: userInfo.name,
-            email: userInfo.email,
-            phoneNumber: userInfo.phone,
-          };
-        } else {
-          info = {
-            displayName: "Ẩn danh",
-            email: "user@example.com",
-            phoneNumber: "0123456789",
-          };
-        }
-        window.Kommunicate.updateUser(info);
-      }
-    }, 3000);
-  }, [userInfo]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     if (window.kommunicate) {
+  //       let info = {};
+  //       if (userInfo) {
+  //         info = {
+  //           userId: userInfo._id,
+  //           displayName: userInfo.name,
+  //           email: userInfo.email,
+  //           phoneNumber: userInfo.phone,
+  //         };
+  //       } else {
+  //         info = {
+  //           displayName: "Ẩn danh",
+  //           email: "user@example.com",
+  //           phoneNumber: "0123456789",
+  //         };
+  //       }
+  //       window.Kommunicate.updateUser(info);
+  //     }
+  //   }, 3000);
+  // }, [userInfo]);
 
   return (
     <>
