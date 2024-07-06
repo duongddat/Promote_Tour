@@ -1,5 +1,5 @@
 import { GoogleAuthProvider, signInWithPopup, getAuth } from "firebase/auth";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { app } from "../../firebase.js";
 import "./OAuth.css";
@@ -10,6 +10,7 @@ import Spin from "../common/Spin.jsx";
 function OAuth({ loading, setLoading }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { fcmToken } = useSelector((state) => state.notifications);
 
   async function handleGoogleClick() {
     setLoading(true);
@@ -27,6 +28,7 @@ function OAuth({ loading, setLoading }) {
         body: JSON.stringify({
           email: resultsFromGoogle.user.email,
           name: resultsFromGoogle.user.displayName,
+          fcmToken: fcmToken,
         }),
       });
 

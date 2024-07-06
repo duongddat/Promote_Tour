@@ -13,6 +13,7 @@ function LoginPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading, userInfo } = useSelector((state) => state.auth);
+  const { fcmToken } = useSelector((state) => state.notifications);
   const [loadingOAuth, setLoadingOAuth] = useState(false);
 
   useEffect(() => {
@@ -26,7 +27,7 @@ function LoginPage() {
 
     const fd = new FormData(event.target);
     const data = Object.fromEntries(fd.entries());
-    dispatch(userLogin(data));
+    dispatch(userLogin({ ...data, fcmToken }));
   }
 
   return (

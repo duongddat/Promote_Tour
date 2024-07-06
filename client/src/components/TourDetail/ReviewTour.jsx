@@ -1,8 +1,8 @@
 import { Form } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useRef, useState } from "react";
-import { io } from "socket.io-client";
 
+import { socket } from "../../helper/socket";
 import ListReviews from "./ListReviews";
 import { setMessage } from "../../store/message-slice";
 import { useAction } from "../../hooks/useAction";
@@ -13,9 +13,9 @@ import "./ReviewTour.css";
 function ReviewTour({ reviews, tourId }) {
   // const navigate = useNavigate();
   // const location = useLocation();
-  const formRef = useRef();
   // const currentPatch = location.pathname;
 
+  const formRef = useRef();
   const { userInfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
@@ -68,7 +68,6 @@ function ReviewTour({ reviews, tourId }) {
     refReview.current.value = "";
 
     //Socket
-    const socket = io(import.meta.env.VITE_API_SITE_URL);
     socket.emit("new_review", tourId);
   }
 

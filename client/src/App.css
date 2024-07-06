@@ -314,6 +314,10 @@ table tbody td {
   gap: 15px;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 .text-loading {
   display: flex;
   align-items: center;

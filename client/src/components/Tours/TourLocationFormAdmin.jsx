@@ -6,7 +6,6 @@ import { setMessage } from "../../store/message-slice";
 function TourLocationFormAdmin({ onSubmit, onMapBoxPoint, openPoint }) {
   const dispatch = useDispatch();
   const location = useSelector((state) => state.location);
-
   const [locationData, setLocationData] = useState({
     locationLong: "",
     locationLat: "",
@@ -17,9 +16,10 @@ function TourLocationFormAdmin({ onSubmit, onMapBoxPoint, openPoint }) {
   useEffect(() => {
     if (openPoint === "LOCATIONS" && location) {
       setLocationData({
-        locationLong: location.lng,
-        locationLat: location.lat,
-        locationDescription: location.name,
+        locationLong: location.lng || "",
+        locationLat: location.lat || "",
+        locationDay: "",
+        locationDescription: location.name || "",
       });
     }
   }, [location, openPoint]);

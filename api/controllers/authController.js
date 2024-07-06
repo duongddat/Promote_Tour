@@ -45,6 +45,7 @@ exports.register = catchAsync(async (req, res, next) => {
     email: req.body.email,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
+    fcmToken: req.body.fcmToken,
   });
 
   const url = `${process.env.CLIENT_SITE_URL}/user/detail`;
@@ -54,7 +55,7 @@ exports.register = catchAsync(async (req, res, next) => {
 });
 
 exports.login = catchAsync(async (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, fcmToken } = req.body;
 
   // 1) Check if email and password exist
   if (!email || !password) {
@@ -71,12 +72,18 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError("Email hoặc mật khẩu không chính xác", 401));
   }
 
-  // 3) If everything ok, send token to client
+  // 3)Check if fcmToken exists && Save fcmToken
+  if (fcmToken !== "" && fcmToken !== undefined && fcmToken !== null) {
+    user.fcmToken = fcmToken;
+    await user.save({ validateBeforeSave: false });
+  }
+
+  // 4) If everything ok, send token to client
   createSendToken(user, 200, res);
 });
 
 exports.google = catchAsync(async (req, res, next) => {
-  const { email, name } = req.body;
+  const { email, name, fcmToken } = req.body;
 
   if (!email || !name) {
     return next(new AppError("Vui lòng chọn tài khoản google!", 400));
@@ -85,6 +92,11 @@ exports.google = catchAsync(async (req, res, next) => {
   const user = await User.findOne({ email });
 
   if (user) {
+    if (!fcmToken) {
+      user.fcmToken = fcmToken;
+      await user.save({ validateBeforeSave: false });
+    }
+
     createSendToken(user, 200, res);
   } else {
     const generatedPassword = Math.random().toString(36).slice(-8);
@@ -94,6 +106,7 @@ exports.google = catchAsync(async (req, res, next) => {
       email: req.body.email,
       password: generatedPassword,
       passwordConfirm: generatedPassword,
+      fcmToken: fcmToken,
     });
 
     const url = `${process.env.CLIENT_SITE_URL}/user/detail`;

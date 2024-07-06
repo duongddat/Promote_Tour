@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { createSlice } from "@reduxjs/toolkit";
 import { userLogin, registerUser } from "./auth-action";
+import { fetchNotifications } from "./notification-action";
 
 const token = localStorage.getItem("token")
   ? localStorage.getItem("token")

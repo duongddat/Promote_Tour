@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { io } from "socket.io-client";
 import parse from "html-react-parser";
 
+import { socket } from "../../helper/socket.js";
 import TourImgGallery from "./TourImgGallery.jsx";
 import headingBorderImg from "../../assets/img/heading-border.webp";
 import { currencyFormatter } from "../../helper/formattingPrice";
@@ -18,11 +18,15 @@ function TourDetail({ tour }) {
   const [modalIsOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const socket = io(import.meta.env.VITE_API_SITE_URL);
-
     socket.on("update_reviews", (newTour) => {
       setTourData(newTour);
     });
+
+    return () => {
+      socket.off("update_reviews", (newTour) => {
+        setTourData(newTour);
+      });
+    };
   }, []);
 
   function openModal() {

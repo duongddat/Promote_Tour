@@ -92,6 +92,7 @@ import { loader as loadBlogsAdmin } from "../utils/Admin/loadBlogsAdmin.js";
 import { loader as loadDiscountAdmin } from "../utils/Admin/loadDiscountAdmin.js";
 import { loader as loadDiscountDetailAdmin } from "../utils/Admin/loadDiscountDetail.js";
 import { loader as loadDiscountEditAdmin } from "../utils/Admin/loadDiscountEdit.js";
+import Test from "../pages/Test.jsx";
 
 const router = createBrowserRouter([
   {
@@ -100,6 +101,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <HomePage />, loader: loadData },
+      { path: "test", element: <Test /> },
       {
         path: "tours",
         children: [

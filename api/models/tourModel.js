@@ -115,7 +115,7 @@ tourSchema.pre("save", function (next) {
 //QUERY MIDDLEWARE
 tourSchema.pre("findOneAndUpdate", function (next) {
   const update = this.getUpdate();
-  if (update.name) {
+  if (update.title) {
     update.slug = slugify(update.title, { lower: true });
   }
   next();

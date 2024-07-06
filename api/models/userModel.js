@@ -59,6 +59,7 @@ const userSchema = new mongoose.Schema(
         message: "Mật khẩu không trùng khớp",
       },
     },
+    fcmToken: { type: String },
     passwordChangedAt: Date,
     passwordOTPReset: String,
     passwordResetExpires: Date,

@@ -2,12 +2,13 @@ const multer = require("multer");
 const sharp = require("sharp");
 
 const Post = require("../models/postModel");
+const Notification = require("../models/notificationModel");
 const Country = require("../models/countryModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const AIPFeatures = require("../utils/apiFeatures");
 const { default: mongoose } = require("mongoose");
-const { bucket } = require("../config/firebase.js");
+const { bucket, sendNotification } = require("../config/firebase.js");
 
 //=====================CONFIGURE IMG FILE=============================
 const uploadImage = async (file, filename) => {
@@ -337,21 +338,65 @@ exports.deletePost = catchAsync(async (req, res, next) => {
 });
 
 exports.likePost = catchAsync(async (req, res, next) => {
-  const id = req.params.id;
-  const post = await Post.findById(id);
+  const { id } = req.params;
+  const userId = req.user._id;
 
-  if (!post.likes.includes(req.user._id)) {
-    await Post.updateOne({ _id: id }, { $push: { likes: req.user._id } });
+  // Start session for transaction management
+  const session = await Post.startSession();
+  session.startTransaction();
+
+  try {
+    const post = await Post.findById(id).session(session);
+
+    if (!post) {
+      await session.abortTransaction();
+      session.endSession();
+      return next(new AppError("Bài viết không tồn tại!", 404));
+    }
+    const receiver = post.user._id;
+    const isLiked = post.likes.includes(userId);
+    const update = isLiked
+      ? { $pull: { likes: userId } }
+      : { $push: { likes: userId } };
+    const message = isLiked
+      ? "Bài viết đã được bỏ thích!"
+      : "Bài viết đã được thích!";
+
+    await Post.updateOne({ _id: id }, update).session(session);
+
+    if (!isLiked) {
+      const notificationMessage = `Đã thích bài viết của bạn.`;
+      const linkTo = `${process.env.CLIENT_SITE_URL}/blog/manage`;
+
+      // Send notification asynchronously
+      if (receiver !== userId) {
+        sendNotification(
+          receiver,
+          userId,
+          "like_post",
+          notificationMessage,
+          linkTo,
+          post._id
+        ).catch(console.error);
+      }
+    } else {
+      await Notification.deleteOne({
+        recipient: receiver,
+        type: "like_post",
+        postId: post._id,
+      }).catch(console.error);
+    }
+
+    await session.commitTransaction();
+    session.endSession();
 
     res.status(200).json({
       status: "success",
-      message: "Bài viết đã được thích!",
+      message: message,
     });
-  } else {
-    await Post.updateOne({ _id: id }, { $pull: { likes: req.user._id } });
-    res.status(200).json({
-      status: "success",
-      message: "Bài viết đã được bỏ thích!",
-    });
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    next(error);
   }
 });

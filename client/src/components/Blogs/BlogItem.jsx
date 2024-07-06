@@ -4,11 +4,12 @@ import { useState } from "react";
 import parse from "html-react-parser";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
+import { socket } from "../../helper/socket";
 import { formatVietnameseDate } from "../../helper/formattingDate";
-import ShowModal from "../common/ShowModal";
 import { useAction } from "../../hooks/useAction";
 import { deleteBlog, likeBlog } from "../../utils/Client/https";
 import { setMessage } from "../../store/message-slice";
+import ShowModal from "../common/ShowModal";
 import Spin from "../common/Spin";
 import "./Blog.css";
 
@@ -25,11 +26,10 @@ function BlogItem({ blog, onSocket, onDeleteBlog }) {
   const dispatch = useDispatch();
   const [modalIsOpen, setIsOpen] = useState(false);
   const { userInfo } = useSelector((state) => state.auth);
-  const { action } = useAction(likeBlog, null, false);
+  const { isLoading: loadingLike, action } = useAction(likeBlog, null, false);
   const { isLoading, action: actionDeleteBlog } = useAction(deleteBlog);
 
   const liked = userInfo && blog.likes.includes(userInfo._id);
-
   const truncatedDescription = truncateDescription(blog.description);
   const parsedDescription = parse(truncatedDescription);
 
@@ -42,10 +42,14 @@ function BlogItem({ blog, onSocket, onDeleteBlog }) {
         })
       );
     }
+
     await action({ blogId: blog._id });
 
     //socket.io
-    onSocket();
+    if (!loadingLike) {
+      socket.emit("count_notification", blog.user._id);
+      onSocket();
+    }
   }
 
   function openModal() {

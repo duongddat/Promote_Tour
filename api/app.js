@@ -10,6 +10,7 @@ const { Server } = require("socket.io");
 const globalErrorHandler = require("./controllers/errorController");
 const socketReview = require("./services/socketReview");
 const socketPost = require("./services/socketPost");
+const socketUserOnline = require("./services/socketUserOnline");
 const authRouter = require("./routes/authRouter");
 const userRouter = require("./routes/userRouter");
 const tourRouter = require("./routes/tourRouter");
@@ -19,6 +20,7 @@ const bookingRouter = require("./routes/bookingRouter");
 const postRouter = require("./routes/postRouter");
 const discountRouter = require("./routes/discountRouter");
 const statisticalRouter = require("./routes/statisticalRouter");
+const notificationRouter = require("./routes/notificationRouter");
 
 dotenv.config({ path: "./.env" });
 const app = express();
@@ -54,6 +56,7 @@ app.use("/booking", bookingRouter);
 app.use("/posts", postRouter);
 app.use("/discounts", discountRouter);
 app.use("/statis", statisticalRouter);
+app.use("/notifications", notificationRouter);
 
 app.use(globalErrorHandler);
 
@@ -67,14 +70,9 @@ const io = new Server(httpServer, {
 });
 
 io.on("connection", (socket) => {
-  io.emit("test", "Test socket đầu tiên!!!");
-
   socketReview(io, socket);
   socketPost(io, socket);
-
-  // socket.on("disconnect", () => {
-  //   console.log("Người dùng đã ngắt kết nối: ", socket.id);
-  // });
+  socketUserOnline(io, socket);
 });
 
 //SEVER

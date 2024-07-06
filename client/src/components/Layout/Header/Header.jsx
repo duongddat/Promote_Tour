@@ -8,6 +8,7 @@ import DropdownItem from "./DropdownItem";
 import "./Header.css";
 import { logout } from "../../../store/auth-slice";
 import { setMessage } from "../../../store/message-slice";
+import Notification from "./Notification";
 
 function Header() {
   const dispatch = useDispatch();
@@ -81,6 +82,7 @@ function Header() {
           <div className="navbar-user ms-auto column-gap-3">
             {userInfo && (
               <>
+                <Notification />
                 <div className="nav-item dropdown">
                   <button
                     className="nav-link dropdown-toggle"

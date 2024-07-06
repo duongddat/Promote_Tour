@@ -1,8 +1,8 @@
 import { Link, useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { io } from "socket.io-client";
 
+import { socket } from "../../../helper/socket";
 import Subtitle from "../../../shared/Subtitle";
 import headingBorderImg from "../../../assets/img/heading-border.webp";
 import BlogList from "../../../components/Blogs/BlogList";
@@ -15,36 +15,16 @@ function BlogPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { blogs, pageNumber, countries } = useLoaderData();
-
   const { userInfo } = useSelector((state) => state.auth);
+
   const [page, setPage] = useState(1);
-  const [countriesData, setCountriesData] = useState([]);
-  const [blogsData, setBlogsData] = useState([]);
-  const [totalPage, setTotalPage] = useState(1);
-  const [loading, setLoading] = useState(false);
+  const [blogsData, setBlogsData] = useState(blogs);
+  const [totalPage, setTotalPage] = useState(pageNumber);
   const listRef = useRef(null);
-
-  //Socket
   const [blogRelateTime, setBlogRelateTime] = useState([]);
-  const socketRef = useRef(null);
 
-  useEffect(() => {
-    socketRef.current = io(import.meta.env.VITE_API_SITE_URL);
-
-    socketRef.current.on("update_posts", (updatedPosts) => {
-      setBlogRelateTime(updatedPosts);
-    });
-  }, []);
-
-  function handleSocketPost() {
-    if (socketRef.current) {
-      socketRef.current.emit("like_posts", page, 6);
-    }
-  }
-
-  const displayBlogs = blogRelateTime.length !== 0 ? blogRelateTime : blogs;
-
-  const loadBlogData = useCallback(async (slug = "", requestUrl = "") => {
+  // Fetch blogs function
+  const fetchBlogs = useCallback(async (slug = "", requestUrl = "") => {
     try {
       let slugCountry = slug ? `/country/${slug}` : "";
       const response = await fetch(
@@ -56,35 +36,92 @@ function BlogPage() {
       }
 
       const resData = await response.json();
-      setBlogsData(resData.data.posts);
-      setTotalPage(resData.data.pageNumber);
+      return { posts: resData.data.posts, pageNumber: resData.data.pageNumber };
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching blogs:", error);
+      throw error;
     }
   }, []);
 
+  // // Fetch initial data
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setLoading(true);
+  //     try {
+  //       const [loadedPageNumber, loadedBlogs, loadedCountries] =
+  //         await Promise.all([pageNumber, blogs, countries]);
+
+  //       setTotalPage(loadedPageNumber);
+  //       setBlogsData(loadedBlogs);
+  //       setCountriesData(loadedCountries);
+  //     } catch (error) {
+  //       console.error("Error loading initial data:", error);
+  //     }
+  //     setLoading(false);
+  //   };
+
+  //   fetchData();
+  // }, [blogs, countries, pageNumber]);
+
+  // Socket connection
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const [page, blogsData, countriesData] = await Promise.all([
-          pageNumber,
-          blogs,
-          countries,
-        ]);
+    socket.on("update_posts", (updatedPosts) => {
+      setBlogRelateTime(updatedPosts);
+    });
 
-        setTotalPage(page);
-        setBlogsData(blogsData);
-        setCountriesData(countriesData);
-      } catch (error) {
-        console.error("Error loading tour data:", error);
-      }
-      setLoading(false);
+    return () => {
+      socket.off("update_posts", (updatedPosts) => {
+        setBlogRelateTime(updatedPosts);
+      });
     };
+  }, []);
 
-    fetchData();
-  }, [blogs, countries, pageNumber]);
+  // Handle socket event
+  const handleSocketPost = () => {
+    socket.emit("like_posts", page, 6);
+  };
 
+  // Update query and load new data
+  const updateQuery = useCallback(
+    async (name = "", value = "") => {
+      let queryOptions = [];
+
+      if (name === "page" || page) {
+        queryOptions.push(name === "page" ? value : `page=${page}`);
+      }
+
+      const queryString =
+        queryOptions.length > 0
+          ? `?limit=6&${queryOptions.join("&")}`
+          : "?limit=6";
+
+      try {
+        const { posts, pageNumber } = await fetchBlogs(slug, queryString);
+        setBlogsData(posts);
+        setTotalPage(pageNumber);
+      } catch (error) {
+        console.error("Error updating query:", error);
+      }
+    },
+    [page, slug, fetchBlogs]
+  );
+
+  // Pagination handler
+  const handlePagination = (newPage) => {
+    setPage(newPage);
+    updateQuery("page", `page=${newPage}`);
+    handleScrollTopList();
+  };
+
+  // Scroll to top of list handler
+  const handleScrollTopList = useCallback(() => {
+    if (listRef.current) {
+      const topPosition = listRef.current.offsetTop;
+      window.scrollTo({ top: topPosition - 100, behavior: "smooth" });
+    }
+  }, []);
+
+  // Check user authentication
   const handleCheckUser = useCallback(() => {
     if (!userInfo) {
       dispatch(
@@ -99,45 +136,18 @@ function BlogPage() {
     navigate("/blog/manage");
   }, [userInfo, dispatch, navigate]);
 
-  const handleScrollTopList = useCallback(() => {
-    if (listRef.current) {
-      const topPosition = listRef.current.offsetTop;
-      window.scrollTo({ top: topPosition - 100, behavior: "smooth" });
-    }
-  }, []);
-
-  const handlePagination = (page) => {
-    setPage(page);
-    updateQuery("page", `page=${page}`);
-    handleScrollTopList();
-  };
-
-  const updateQuery = useCallback(
-    (name = "", value = "") => {
-      let queryOptions = [];
-
-      if (name === "page" || page) {
-        queryOptions.push(name === "page" ? value : `page=${page}`);
-      }
-
-      const queryString =
-        queryOptions.length > 0
-          ? `?limit=6&${queryOptions.join("&")}`
-          : "?limit=6";
-
-      loadBlogData(slug, queryString);
-    },
-    [page, loadBlogData, slug]
-  );
-
-  function handleCheckPageToDelete() {
+  // Check if we need to adjust page number after deleting blog
+  const handleCheckPageToDelete = () => {
+    console.log("Delete blog");
     if (blogsData.length === 1 && page > 1) {
       setPage((prevPage) => prevPage - 1);
       updateQuery("page", `page=${page - 1}`);
     }
 
     updateQuery("page", `page=${page}`);
-  }
+  };
+
+  const displayBlogs = blogRelateTime.length !== 0 ? blogRelateTime : blogsData;
 
   return (
     <section className="section-bg">
@@ -163,18 +173,14 @@ function BlogPage() {
         </div>
         <div className="row row-gap-5 mt-5" ref={listRef}>
           <div className="col-xl-9 col-lg-9 col-md-12 col-12">
-            {loading ? (
-              <h5 className="text-center mt-5">Đang tải......</h5>
-            ) : (
-              <BlogList
-                blogs={displayBlogs}
-                pageNumber={totalPage}
-                currentPage={page}
-                onPaginate={handlePagination}
-                onSocket={handleSocketPost}
-                onDeleteBlog={handleCheckPageToDelete}
-              />
-            )}
+            <BlogList
+              blogs={displayBlogs}
+              pageNumber={totalPage}
+              currentPage={page}
+              onPaginate={handlePagination}
+              onSocket={handleSocketPost}
+              onDeleteBlog={handleCheckPageToDelete}
+            />
           </div>
           <div className="col-xl-3 col-lg-3 col-md-12 col-sm-12">
             <div className="sticky">
@@ -196,11 +202,8 @@ function BlogPage() {
                   </div>
                 </div>
               </div>
-              {loading ? (
-                <h5 className="text-center mt-5">Đang tải......</h5>
-              ) : (
-                <CountryTag countries={countriesData} />
-              )}
+
+              <CountryTag countries={countries} />
             </div>
           </div>
         </div>

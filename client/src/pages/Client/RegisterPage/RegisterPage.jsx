@@ -13,6 +13,7 @@ const RegisterPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading, userInfo } = useSelector((state) => state.auth);
+  const { fcmToken } = useSelector((state) => state.notifications);
 
   useEffect(() => {
     if (userInfo) {
@@ -37,7 +38,7 @@ const RegisterPage = () => {
       return;
     }
 
-    dispatch(registerUser(data));
+    dispatch(registerUser({ ...data, fcmToken }));
   }
 
   return (
