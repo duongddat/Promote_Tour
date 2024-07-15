@@ -1,7 +1,7 @@
 import { useLoaderData, useNavigate } from "react-router-dom";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { io } from "socket.io-client";
+import { socket } from "../../../helper/socket";
 
 import BlogManage from "../../../components/Blogs/BlogManage";
 
@@ -16,19 +16,22 @@ function BlogManagePage() {
 
   //Socket
   const [blogRelateTime, setBlogRelateTime] = useState([]);
-  const socketRef = useRef(null);
 
   useEffect(() => {
-    socketRef.current = io(import.meta.env.VITE_API_SITE_URL);
-
-    socketRef.current.on("update_posts_manage", (updatedPosts) => {
+    socket.on("update_posts_manage", (updatedPosts) => {
       setBlogRelateTime(updatedPosts);
     });
+
+    return () => {
+      socket.off("update_posts_manage", (updatedPosts) => {
+        setBlogRelateTime(updatedPosts);
+      });
+    };
   }, []);
 
   function handleSocketPost() {
-    if (socketRef.current) {
-      socketRef.current.emit("like_posts_manage", page, 6, userInfo._id);
+    if (socket) {
+      socket.emit("like_posts_manage", page, 6, userInfo._id);
     }
   }
 

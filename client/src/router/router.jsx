@@ -24,6 +24,7 @@ import UserUpdateInfo from "../pages/Client/UserDetailPage/UserUpdateInfor.jsx";
 import UserChangePassword from "../pages/Client/UserDetailPage/UserChangePassword.jsx";
 import BookingPage from "../pages/Client/BookingPage/BookingPage.jsx";
 import SuccessCheckout from "../components/Booking/SuccessCheckout.jsx";
+import NotificationPage from "../pages/Client/NotificationPage/NotificationPage.jsx";
 import ErrorPage from "../pages/ErrorPage/ErrorPage.jsx";
 
 import HomeAdminPage from "../pages/Admin/Home/HomePage.jsx";
@@ -70,6 +71,7 @@ import { loader as loadBlogEdit } from "../utils/Client/loadBlogEdit.js";
 import { loader as loadBlogDetail } from "../utils/Client/loadBlogDetail.js";
 import { loader as loadBlogManage } from "../utils/Client/loadBlogManage.js";
 import { loader as loadMyTour } from "../utils/Client/loadMyTour.js";
+import { loader as loadNotificationData } from "../utils/Client/loadNotificationData.js";
 
 import { loader as loadDataAdmin } from "../utils/Admin/loadDataAdmin.js";
 import { loader as loadTourAdmin } from "../utils/Admin/loadTourAdmin.js";
@@ -177,6 +179,11 @@ const router = createBrowserRouter([
         path: "checkout-success/:booking",
         element: <SuccessCheckout />,
         loader: loadSuccessCheckout,
+      },
+      {
+        path: "notification",
+        element: <NotificationPage />,
+        loader: loadNotificationData,
       },
     ],
   },

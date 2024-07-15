@@ -154,6 +154,7 @@
 
 .notification-dialog {
   display: none;
+  transition: all ease-in-out 1s;
 }
 
 .notification-dialog:hover {
@@ -273,7 +274,6 @@
   align-items: center;
   line-height: 20px;
   font-weight: bold;
-  padding-right: 30px;
 }
 
 .header-notification-list__title {
@@ -354,7 +354,7 @@
 }
 
 .no-data-dialog {
-  padding-top: 0;
+  padding: 50px 0;
   height: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -386,6 +386,13 @@
   line-height: 16px;
   font-size: 14px;
   padding: 0;
+}
+
+.loading__noti {
+  height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @keyframes fade-in {

@@ -351,3 +351,53 @@ export async function cancelBooking(bookingId) {
 
   return resData;
 }
+
+export async function cleanNotifications() {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    throw json(
+      { message: "Please login to clean notifcation." },
+      {
+        status: 400,
+      }
+    );
+  }
+
+  const response = await fetch(
+    `http://localhost:8080/notifications/cleanNoti`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
+
+  return response;
+}
+
+export async function deleteNotification(notiId) {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    throw json(
+      { message: "Please login to delete notification." },
+      {
+        status: 400,
+      }
+    );
+  }
+
+  const response = await fetch(
+    `http://localhost:8080/notifications/${notiId}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
+
+  return response;
+}

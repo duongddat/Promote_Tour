@@ -5,14 +5,17 @@ const backendURL = "http://localhost:8080";
 
 export const fetchNotifications = createAsyncThunk(
   "notifications/fetchNotifications",
-  async (limit, { rejectWithValue, dispatch, getState }) => {
+  async (
+    { limit, markAsRead = false } = {},
+    { rejectWithValue, dispatch, getState }
+  ) => {
     try {
       const state = getState();
       const token = state.auth.token;
       const limitNoti = limit || 6;
 
       const response = await fetch(
-        `${backendURL}/notifications?limit=${limitNoti}`,
+        `${backendURL}/notifications?limit=${limitNoti}&markAsRead=${markAsRead}`,
         {
           method: "GET",
           headers: {

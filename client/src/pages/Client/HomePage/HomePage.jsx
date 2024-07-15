@@ -33,8 +33,9 @@ export default function HomePage() {
                   <img loading="lazy" src={worldImg} alt="World Image" />
                 </div>
                 <h1>
-                  Traveling opens the door to creating
-                  <span className="hinglight"> memories</span>
+                  Tạo nên những
+                  <span className="hinglight"> kỷ niệm </span>đáng nhớ cùng
+                  chúng tôi.
                 </h1>
                 <p>
                   Tận hưởng sự xa hoa và đẳng cấp tối đa với các tour du lịch

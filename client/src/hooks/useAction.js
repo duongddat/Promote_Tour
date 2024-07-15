@@ -23,7 +23,11 @@ export function useAction(actionFn, navigateRoute = null, showToast = true) {
             setMessage({ type: resData.status, message: resData.message })
           );
       }
-      if ((resData.status === "success" || resData.ok) && navigateRoute) {
+
+      if (
+        (resData.status === "success" || resData.ok) &&
+        navigateRoute !== null
+      ) {
         navigate(navigateRoute);
       }
     } catch (error) {

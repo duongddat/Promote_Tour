@@ -11,9 +11,17 @@ router.get(
   notificationController.getNumNotificationOfUser
 );
 
+router.delete(
+  "/cleanNoti",
+  authController.protect,
+  notificationController.deleteAllNotification
+);
+
 router
   .route("/")
   .get(authController.protect, notificationController.getNotificationOfUser)
   .post(notificationController.sendNotification);
+
+router.route("/:id").delete(notificationController.deleteNotification);
 
 module.exports = router;

@@ -23,20 +23,20 @@ const notificationSlice = createSlice({
       if (!state.loadNoti) {
         state.loadNoti = true;
       }
-      state.numNoti = action.payload;
+      state.numNoti = action.payload || 0;
     },
     addNotification: (state, action) => {
       state.listNoti.push(action.payload);
     },
     setNotifications: (state, action) => {
-      state.listNoti = action.payload.notifications;
+      state.listNoti = action.payload.notifications || [];
     },
     clearNotifications: (state) => {
       state.listNoti = [];
     },
     defaultNoti: () => {
+      console.log("DefaultNoti");
       return {
-        fcmToken: null,
         listNoti: [],
         numNoti: 0,
         loading: false,

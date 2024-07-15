@@ -10,7 +10,10 @@ const {
 exports.getNumNotificationOfUser = catchAsync(async (req, res, next) => {
   const id = req.user.id;
 
-  const numNoti = await Notification.countDocuments({ recipient: id });
+  const numNoti = await Notification.countDocuments({
+    recipient: id,
+    read: false,
+  });
 
   if (numNoti === undefined) {
     return next(
@@ -30,20 +33,31 @@ exports.getNumNotificationOfUser = catchAsync(async (req, res, next) => {
 exports.getNotificationOfUser = catchAsync(async (req, res, next) => {
   const id = req.user.id;
   const limit = req.query.limit || 6;
+  const markAsRead = req.query.markAsRead || false;
 
-  const notifications = await Notification.find({ recipient: id })
-    .populate({
-      path: "sender",
-      select: "_id name photo",
-    })
-    .sort({
-      createdAt: -1,
-    })
-    .limit(limit);
+  const [limitNoti, notifications] = await Promise.all([
+    Notification.countDocuments({ recipient: id }),
+    Notification.find({ recipient: id })
+      .populate({
+        path: "sender",
+        select: "_id name photo",
+      })
+      .sort({
+        createdAt: -1,
+      })
+      .limit(limit),
+  ]);
 
   if (!notifications) {
     return next(
       new AppError("Không tìm thấy thông báo của người dùng hiện tại!", 404)
+    );
+  }
+
+  if (markAsRead) {
+    await Notification.updateMany(
+      { recipient: id, read: false },
+      { read: true }
     );
   }
 
@@ -52,6 +66,7 @@ exports.getNotificationOfUser = catchAsync(async (req, res, next) => {
     message: "Truy xuất thành công",
     data: {
       notifications,
+      limitNoti,
     },
   });
   next();
@@ -68,5 +83,31 @@ exports.sendNotification = catchAsync(async (req, res, next) => {
   res.status(200).json({
     message: "Successfully sent message",
     response: response,
+  });
+});
+
+exports.deleteNotification = catchAsync(async (req, res, next) => {
+  const id = req.params.id;
+
+  const notification = await Notification.findByIdAndDelete(id);
+
+  if (!notification) {
+    return next(new AppError("Không tìm thấy thông báo nào với ID đó", 404));
+  }
+
+  res.status(204).json({
+    status: "success",
+    data: null,
+  });
+});
+
+exports.deleteAllNotification = catchAsync(async (req, res, next) => {
+  const id = req.user.id;
+
+  await Notification.deleteMany({ recipient: id });
+
+  res.status(204).json({
+    status: "success",
+    data: null,
   });
 });

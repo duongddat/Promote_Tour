@@ -28,21 +28,21 @@ function AboutUsPage() {
               className="col-xl-7 col-lg-7 col-md-6 col-12"
               data-aos="fade-down"
             >
-              <span className="tagline">Travel with us,</span>{" "}
+              <span className="tagline">Du lịch với chúng tôi,</span>{" "}
               <span className="text-relative">
                 HoYoViVu
                 <img src={CurveImg} alt="curve image" className="curve" />
               </span>
               <h1 className="d-flex flex-column gap-2">
-                {`Join us, `}
+                {`Tham gia, `}
                 <div className="wrap text-wrap">
                   <Typewriter
                     words={[
-                      "Explore more!",
-                      "Discover joy",
-                      "Travel tales",
-                      "Miraculous journey",
-                      "More and more...",
+                      "Khám phá thêm!",
+                      "Tận hưởng",
+                      "Câu chuyện thu vị",
+                      "Hành trình kỳ diệu",
+                      "Hơn thế nữa...",
                     ]}
                     loop={5}
                     cursor
@@ -63,7 +63,7 @@ function AboutUsPage() {
               </p>
               <Link to="https://www.facebook.com/profile.php?id=61558991602653">
                 <button className="button">
-                  Go to fanpage
+                  Fanpage
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"

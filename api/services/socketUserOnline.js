@@ -42,7 +42,10 @@ const socketUserOnline = (io, socket) => {
   socket.on("count_notification", async (userId) => {
     const receiver = getUser(userId);
     if (receiver !== null) {
-      const numNoti = await Notification.countDocuments({ recipient: userId });
+      const numNoti = await Notification.countDocuments({
+        recipient: userId,
+        read: false,
+      });
 
       io.to(receiver.socketId).emit("get_num_notification", numNoti);
     }
