@@ -1,3 +1,4 @@
+import { useCallback, useState } from "react";
 import ToggleButton from "../common/ToggleButton";
 import "./Notifications.css";
 
@@ -20,6 +21,31 @@ const LIST_SETTING = [
 ];
 
 function NotificationSetting() {
+  const [settingNoti, setSettingNoti] = useState(LIST_SETTING);
+  const [allChecked, setAllChecked] = useState(true);
+
+  const handleToggleAll = useCallback(() => {
+    setAllChecked((prevAllChecked) => {
+      const newAllChecked = !prevAllChecked;
+      setSettingNoti((prevSettings) =>
+        prevSettings.map((setting) => ({ ...setting, check: newAllChecked }))
+      );
+      return newAllChecked;
+    });
+  }, []);
+
+  const handleToggleIndividual = useCallback((type) => {
+    setSettingNoti((prevSettings) => {
+      const newSettings = prevSettings.map((setting) =>
+        setting.type === type ? { ...setting, check: !setting.check } : setting
+      );
+
+      const allChecked = newSettings.every((setting) => setting.check);
+      setAllChecked(allChecked);
+      return newSettings;
+    });
+  }, []);
+
   return (
     <div className="setting-switch-list">
       <div className="setting-switch-list__title">
@@ -28,17 +54,20 @@ function NotificationSetting() {
       </div>
       <div className="setting-switch-item">
         <div className="setting-switch-item__label">Tất cả thông báo</div>
-        <ToggleButton check={true} />
+        <ToggleButton check={allChecked} setCheck={handleToggleAll} />
       </div>
       <div className="setting-switch-list__title">
         <span>Chi tiết</span>
         <div className="setting-switch-list__underline"></div>
       </div>
-      {LIST_SETTING.length > 0 &&
-        LIST_SETTING.map((setting) => (
+      {settingNoti.length > 0 &&
+        settingNoti.map((setting) => (
           <div className="setting-switch-item" key={setting.type}>
             <div className="setting-switch-item__label">{setting.label}</div>
-            <ToggleButton check={setting.check} />
+            <ToggleButton
+              check={setting.check}
+              setCheck={() => handleToggleIndividual(setting.type)}
+            />
           </div>
         ))}
     </div>

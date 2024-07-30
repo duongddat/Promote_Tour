@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { useState } from "react";
 
 import cleanBoxImg from "../../assets/img/clean_tool.png";
 import noDataDialog from "../../assets/img/no_reply.png";
@@ -10,12 +11,11 @@ import {
   deleteNotification,
 } from "../../utils/Client/https";
 import { defaultNoti } from "../../store/notification-slice";
-import { useState } from "react";
 import { titleNotification } from "../../helper/titleNotification";
 import { formantDateNoti } from "../../helper/formattingDate";
-import "./Notifications.css";
 import { setMessage } from "../../store/message-slice";
 import Spin from "../common/Spin";
+import "./Notifications.css";
 
 function Notifications({ notifications, limit }) {
   const dispatch = useDispatch();
@@ -24,11 +24,14 @@ function Notifications({ notifications, limit }) {
   const [size, setSize] = useState(limit);
   const [limitNoti, setLimitNoti] = useState(6);
   const [isLoading, setIsLoading] = useState(false);
-  const { action } = useAction(cleanNotifications);
-  const { action: actionDeleteNoti } = useAction(deleteNotification);
+  const { action: actionClearNoti } = useAction(cleanNotifications);
+  const { action: actionDeleteNoti } = useAction(
+    deleteNotification,
+    "/notification"
+  );
 
   async function handleCleanNotification() {
-    await action();
+    await actionClearNoti();
 
     dispatch(defaultNoti());
   }
@@ -68,7 +71,6 @@ function Notifications({ notifications, limit }) {
   }
 
   async function handleDeleteNotification(id) {
-    console.log(id);
     await actionDeleteNoti(id);
   }
 

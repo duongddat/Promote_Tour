@@ -19,6 +19,9 @@ const notificationSlice = createSlice({
     setFcmToken: (state, action) => {
       state.fcmToken = action.payload;
     },
+    setLoadNoti: (state) => {
+      state.loadNoti = true;
+    },
     setNumNotification: (state, action) => {
       if (!state.loadNoti) {
         state.loadNoti = true;

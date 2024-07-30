@@ -51,6 +51,23 @@ const socketUserOnline = (io, socket) => {
     }
   });
 
+  socket.on("send_notification", async (userId) => {
+    const receiver = getUser(userId);
+    if (receiver !== null) {
+      const listNoti = await Notification.find({ recipient: userId })
+        .populate({
+          path: "sender",
+          select: "_id name photo",
+        })
+        .sort({
+          createdAt: -1,
+        })
+        .limit(6);
+
+      io.to(receiver.socketId).emit("get_list_notification", listNoti);
+    }
+  });
+
   socket.on("signOut", (userId, socketId = null) => {
     removeOnlineUser(userId, null);
     io.emit("getOnlineUsers", [...userOnline.keys()]);

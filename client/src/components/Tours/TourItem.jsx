@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import "./Tours.css";
 import { currencyFormatter } from "../../helper/formattingPrice";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import "./Tours.css";
 
 function TourItem({ tour }) {
   return (

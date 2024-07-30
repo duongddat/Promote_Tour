@@ -1,18 +1,16 @@
-import { useState } from "react";
+import { memo } from "react";
 
-function ToggleButton({ check }) {
-  const [isCheck, setIsCheck] = useState(check);
-
+function ToggleButton({ check, setCheck }) {
   function handleToggle() {
-    setIsCheck((prevIsCheck) => !prevIsCheck);
+    setCheck();
   }
 
   return (
     <label className="switch">
-      <input type="checkbox" checked={isCheck} onChange={handleToggle} />
+      <input type="checkbox" checked={check} onChange={handleToggle} />
       <span className="slider round"></span>
     </label>
   );
 }
 
-export default ToggleButton;
+export default memo(ToggleButton);
