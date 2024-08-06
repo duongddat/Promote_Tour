@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import parse from "html-react-parser";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { io } from "socket.io-client";
+import { socket } from "../../helper/socket";
 
 import { formatVietnameseDate } from "../../helper/formattingDate";
 import BlogSwiperGallery from "./BlogSwiperGallery";
@@ -29,12 +29,9 @@ function BlogDetail({ blog }) {
     deleteBlog,
     "/blog/manage"
   );
-  const socketRef = useRef(null);
 
   useEffect(() => {
-    socketRef.current = io("http://localhost:8080");
-
-    socketRef.current.on("update_post_detail", (updatedPost) => {
+    socket.on("update_post_detail", (updatedPost) => {
       setBlogData(updatedPost);
       setLiked(userInfo && updatedPost.likes.includes(userInfo._id));
     });
@@ -55,8 +52,9 @@ function BlogDetail({ blog }) {
     }
     await action({ blogId: blog._id });
 
-    if (socketRef.current) {
-      socketRef.current.emit("like_post_detail", blog._id);
+    if (socket) {
+      socket.emit("like_post_detail", blog._id);
+      socket.emit("send_notification", blog.user._id);
     }
   }
 

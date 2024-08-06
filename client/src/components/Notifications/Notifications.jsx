@@ -1,8 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
+import { socket } from "../../helper/socket";
 import cleanBoxImg from "../../assets/img/clean_tool.png";
 import noDataDialog from "../../assets/img/no_reply.png";
 import { useAction } from "../../hooks/useAction";
@@ -19,16 +20,29 @@ import "./Notifications.css";
 
 function Notifications({ notifications, limit }) {
   const dispatch = useDispatch();
-  const { token } = useSelector((state) => state.auth);
+  const { token, userInfo } = useSelector((state) => state.auth);
   const [listNoti, setListNoti] = useState(notifications);
   const [size, setSize] = useState(limit);
   const [limitNoti, setLimitNoti] = useState(6);
   const [isLoading, setIsLoading] = useState(false);
   const { action: actionClearNoti } = useAction(cleanNotifications);
-  const { action: actionDeleteNoti } = useAction(
-    deleteNotification,
-    "/notification"
-  );
+  const { action: actionDeleteNoti } = useAction(deleteNotification);
+
+  useEffect(() => {
+    socket.on("get_list_notification", (updatedNoti) => {
+      if (updatedNoti) {
+        setListNoti(updatedNoti);
+      }
+    });
+
+    return () => {
+      socket.off("get_list_notification", (updatedNoti) => {
+        if (updatedNoti) {
+          setListNoti(updatedNoti);
+        }
+      });
+    };
+  }, []);
 
   async function handleCleanNotification() {
     await actionClearNoti();
@@ -72,6 +86,7 @@ function Notifications({ notifications, limit }) {
 
   async function handleDeleteNotification(id) {
     await actionDeleteNoti(id);
+    socket.emit("send_notification", userInfo._id);
   }
 
   return (

@@ -48,6 +48,7 @@ function BlogItem({ blog, onSocket, onDeleteBlog }) {
     //socket.io
     if (!loadingLike) {
       socket.emit("count_notification", blog.user._id);
+      socket.emit("send_notification", blog.user._id);
       onSocket();
     }
   }
